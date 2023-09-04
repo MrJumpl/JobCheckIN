@@ -1,0 +1,19 @@
+.match {
+    height: 45px;
+    width: 45px;
+    border-radius: 50%;
+    display: inline-block;
+
+    &-1 {
+        background-color: #23BC32;
+    }
+    &-2 {
+        background-color: #03A113;
+    }
+    &-3 {
+        background-color: #EEA03A;
+    }
+    &-4 {
+        background-color: #DC143C;
+    }
+  }

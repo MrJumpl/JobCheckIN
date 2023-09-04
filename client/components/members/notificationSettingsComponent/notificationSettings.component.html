@@ -1,0 +1,6 @@
+<ng-container *ngIf="isStudent(); else companyTemplate">
+    <jobchin-student-notificationSettings></jobchin-student-notificationSettings>
+</ng-container>
+<ng-template #companyTemplate>
+    <jobchin-company-notificationSettings></jobchin-company-notificationSettings>
+</ng-template>

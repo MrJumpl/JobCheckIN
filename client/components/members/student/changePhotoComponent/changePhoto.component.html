@@ -1,0 +1,29 @@
+<muniweb-form
+    #form
+    [config]="formConfig"
+    [formGroup]="form.form"
+    [submitAttempt]="form.formSubmitAttempt"
+>
+    <ng-container body>
+        <muniweb-form-field id="photo"
+            label="Profilový obrázek"
+            controlName="photo"
+        >
+            <div class="size--l--10-12">
+                <muniweb-temp-file-upload
+                    formControlName="photo"
+                    [accept]="jobchinSettings.allowedImageTypes"
+                    [maxFiles]="1"
+                    [maxFileSizeB]="10485760"
+                ></muniweb-temp-file-upload>
+            </div>
+        </muniweb-form-field>
+        
+    </ng-container>
+
+    <jobchin-formFooter
+        footer
+        [formConfig]="formConfig"
+    >
+    </jobchin-formFooter>
+</muniweb-form>

@@ -1,0 +1,18 @@
+<ng-container [formGroup]="getFormGroup()">
+    <muniweb-form-field id="notificaitonFrequency"
+                        [label]="label"
+                        [controlName]="controlName"
+                        type="radio"
+    >
+        <div class="inp-items inp-items--inline">
+            <ul class="inp-items__list">
+                <li class="inp-items__item" *ngFor="let item of values">
+                    <label class="inp-item inp-item--radio">
+                        <input type="radio" [formControlName]="controlName" [value]="item">
+                        <span>{{translate(item)}}</span>
+                    </label>
+                </li>
+            </ul>
+        </div>
+    </muniweb-form-field>
+</ng-container>

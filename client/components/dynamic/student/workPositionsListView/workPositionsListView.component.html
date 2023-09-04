@@ -1,0 +1,34 @@
+<table class="workPositions-list">
+    <thead>
+        <tr>
+            <th>Shoda</th>
+            <th>Pozice</th>
+            <th>Firma</th>
+            <th>Platné do</th>
+            <th>Oblíbené</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let workPosition of workPositions; index as i">
+            <td class="center middle"><span class="match match-{{ workPosition.match }}"></span></td>
+            <td>
+                <a class="u-mb-0 big" href="{{ umbraco.basePath }}/{{ workPosition.workPositionId }}"> {{ workPosition.name }} </a>
+                <p class="u-mb-0 bold"> {{ workPosition.companyName }} </p>
+                <p class="u-mb-0"> 
+                    {{ getLocationName(workPosition.locationId) }} |
+                    {{ getContractsNames(workPosition.contractTypes) }}
+                    {{ getRemote(workPosition.remote) }}
+
+                </p>
+                <p class="u-mb-0"> Zveřejněno: {{ workPosition.publication | date:'mediumDate' }} </p>
+            </td>
+            <td class="center middle">
+                <img class="logo" src="{{ getLogo(workPosition.companyLogo) }}" />
+            </td>
+            <td class="center middle big bold">{{ workPosition.expiration | date:'mediumDate' }}</td>
+            <td class="center middle favorite">
+                <jobchin-student-favoriteButton [favorite]="workPosition.favorite" (click)="onFavoriteClick(workPosition)"></jobchin-student-favoriteButton>    
+            </td>
+        </tr>
+    </tbody>
+</table>

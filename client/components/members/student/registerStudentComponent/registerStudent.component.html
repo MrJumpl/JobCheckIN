@@ -1,0 +1,68 @@
+<muniweb-notice
+    *ngIf="loading"
+    noticeType="success"
+>
+    <p>
+        Vítejte v systému JobCheckIN
+    </p>
+</muniweb-notice>
+
+<jobchin-error *ngIf="!loading && err"></jobchin-error>
+
+<div class="grid grid--center" *ngIf="!loading && !err">
+    <div class="grid__cell size--l--6-12 size--m--8-12">
+        <p [innerHtml]="registrationConfig.text"></p>
+        
+        <muniweb-fieldset *ngIf="!success">
+            <muniweb-form #form
+                [config]="formConfig"
+                [formGroup]="form.form"
+                [submitAttempt]="form.formSubmitAttempt"
+            >
+                <ng-container body>
+                    <muniweb-form-field id="agreement"
+                        required="true"
+                        controlName="agreement"
+                    >
+                        <label class="inp-item inp-item--checkbox">
+                            <input
+                                type="checkbox"
+                                formControlName="agreement"
+                            >
+                            <span>
+                                <span class="bold" i18n="@@Agree">Souhlasím</span>
+                                <span > se <a href="{{registrationConfig.gdprUrl}}" target="_blank">zpracováním osobních údajů</a></span>
+                            </span>
+                        </label>
+                    </muniweb-form-field>
+                            
+                    <p>
+                        <label class="inp-item inp-item--checkbox">
+                            <input
+                                type="checkbox"
+                                formControlName="provideContact"
+                            >
+                            <span>
+                                Chci být zařazen/a do databáze studentů přístupné zaměstnavatelům registrovaným v systému JobCheckIN, kteří mě mohou kontaktovat s nabídkami pracovních příležitostí.
+                            </span>
+                        </label>
+                    </p>
+                </ng-container>
+                
+                <jobchin-formFooter footer
+                    [formConfig]="formConfig">
+                </jobchin-formFooter>
+            </muniweb-form>
+        </muniweb-fieldset>
+
+        <muniweb-notice
+            *ngIf="success"
+            noticeType="success"
+        >
+            <p>
+                Registrace proběhla v pořádku.
+            </p>
+        </muniweb-notice>
+    </div>
+</div>
+

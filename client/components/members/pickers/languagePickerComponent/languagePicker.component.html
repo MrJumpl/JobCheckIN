@@ -1,0 +1,55 @@
+<div *ngFor="let lang of _value" class="grid grid--middle">
+    <div class="grid__cell size--l--{{ useOptional ? '4' : '6'}}-12 size--m--{{ useOptional ? '2' : '4'}}-4 size--s--{{ useOptional ? '1' : '2'}}-2 size--xs--1-2">
+        <span class="inp-fix inp-fix--select">
+            <ng-select
+                bindLabel="name"
+                bindValue="languageId"
+                placeholder="Vyberte jazyk"
+                [multiple]="false"
+                [closeOnSelect]="true"
+                [items]="languages"
+                [ngClass]="{ 'langPicker__error': (lang.languageId == null) }"
+                [ngModel]="lang.languageId"
+                (ngModelChange)="setLanguageValue(lang, $event)"
+                (clear)="clearSelectedLanguage(lang)"
+            ></ng-select>
+        </span>
+    </div>
+    <div class="grid__cell size--l--{{ useOptional ? '3' : '5'}}-12 size--m--2-4 size--s--1-2 size--xs--1-2">
+        <span class="inp-fix inp-fix--select">
+            <ng-select
+                bindLabel="name"
+                bindValue="id"
+                placeholder="Úroveň"
+                [multiple]="false"
+                [closeOnSelect]="true"
+                [items]="languageSkills"
+                [ngModel]="lang.skill"
+                (ngModelChange)="setSkillValue(lang, $event)"
+                (clear)="clearSelectedSkill(lang)"
+            ></ng-select>
+        </span>
+    </div>
+    <div *ngIf="useOptional" class="grid__cell size--l--4-12 size--m--2-4 size--s--1-2 size--xs--1-2">
+        <span class="inp-fix inp-fix--select">
+            <ng-select
+                bindLabel="displayValue"
+                bindValue="value"
+                [multiple]="false"
+                [closeOnSelect]="true"
+                [items]="optional"
+                [ngClass]="{ 'langPicker__error': (lang.skill == null) }"
+                [(ngModel)]="lang.optional"
+            ></ng-select>
+        </span>
+    </div>
+    <div class="grid__cell size--l--1-12 size--m--2-4 size--s--1-2 size--xs--1-2 langPicker__removeGrid">
+        <a class="langPicker__remove" href="javascript:void(0)" (click)="removeLang(lang)">
+            X
+        </a>
+    </div>
+</div>
+
+<a class="langPicker__add" href="javascript:void(0)" (click)="addLang()">
+    + Přidat další jazyk
+</a>

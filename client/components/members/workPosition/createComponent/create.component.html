@@ -1,0 +1,71 @@
+<div class="grid grid--center">
+    <div class="grid__cell size--l--9-12 size--m--8-12">
+        <div class="grid">
+            <div class="grid__cell size--l--8-12 size--m--8-12">
+                <h1 class="h2">Vytvoření nové nabídky</h1>
+                <p>
+                    <jobchin-workPosition-preview [getModelFunc]="getModel"></jobchin-workPosition-preview>
+                </p>
+            </div>
+            <div class="grid__cell size--l--4-12 size--m--4-12">
+                <p class="right">
+                    <muniweb-button
+                        label="Zpět na seznam"
+                        [size]="MuniWebButtonSize.small"
+                        (click)="redirectList()"
+                    ></muniweb-button>
+                </p>
+            </div>
+        </div>
+
+        <muniweb-fieldset>
+            <div [ngSwitch]="step">
+                <div *ngSwitchCase="CreateSteps.BasicInfo">
+                    <jobchin-workPosition-basicInfo
+                        submitButtonLabel="Pokračovat"
+                        [standAlone]="false"
+                        [model]="createModel.basicInfo"
+                        (onSubmit)="nextBasicInfo($event)"
+                    ></jobchin-workPosition-basicInfo>
+                </div>
+                    
+                <div *ngSwitchCase="CreateSteps.Detail">
+                    <jobchin-workPosition-detail
+                        submitButtonLabel="Pokračovat"
+                        [standAlone]="false"
+                        [model]="createModel.detail"
+                        [onCallBack]="backDetail"
+                        (onSubmit)="nextDetail($event)"
+                    ></jobchin-workPosition-detail>
+                </div>
+    
+                <div *ngSwitchCase="CreateSteps.Candidates">
+                    <jobchin-workPosition-candidates
+                        submitButtonLabel="Pokračovat"
+                        [standAlone]="false"
+                        [model]="createModel.candidates"
+                        [onCallBack]="backCandidates"
+                        (onSubmit)="nextCandidates($event)"
+                    ></jobchin-workPosition-candidates>
+                </div>
+    
+                <div *ngSwitchCase="CreateSteps.CandidateRequest">
+                    <jobchin-workPosition-candidateRequest
+                        submitButtonLabel="Vytvořit"
+                        [standAlone]="false"
+                        [model]="createModel.candidateRequest"
+                        [onCallBack]="backCandidateRequest"
+                        [onCallServer]="createWorkPosition"
+                        (onSubmit)="nextCandidateRequest($event)"
+                    ></jobchin-workPosition-candidateRequest>
+                </div>
+    
+                <div *ngSwitchCase="CreateSteps.Success">
+                    <muniweb-fieldset>
+                        <p>Done!</p>
+                    </muniweb-fieldset>
+                </div>
+            </div>
+        </muniweb-fieldset>
+    </div>
+</div>

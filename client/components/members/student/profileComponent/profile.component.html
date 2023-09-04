@@ -1,0 +1,36 @@
+<jobchin-student-header></jobchin-student-header>
+
+<div class="grid grid--xl">
+    <div class="grid__cell size--l--3-12 size--m--4-12">
+        <muniweb-side-menu>
+            <side-menu-item
+                [routerLink]="jobchinRoutes.overview"
+                title="Životopis"
+            ></side-menu-item>
+            <side-menu-item
+                [routerLink]="jobchinRoutes.basicInfo"
+                title="Základní informace"
+            ></side-menu-item>
+            <side-menu-item
+                [routerLink]="jobchinRoutes.workExperiences"
+                title="Pracovní zkušenosti"
+            ></side-menu-item>
+            <side-menu-item
+                [routerLink]="jobchinRoutes.skills"
+                title="Dovednosti"
+            ></side-menu-item>
+            <side-menu-item
+                [routerLink]="jobchinRoutes.study"
+                title="Vzdělání"
+            ></side-menu-item>
+            <side-menu-item
+                [routerLink]="jobchinRoutes.contact"
+                title="Kontakt"
+            ></side-menu-item>
+        </muniweb-side-menu>
+    </div>
+
+    <div class="grid__cell size--l--9-12 size--m--8-12">
+        <router-outlet></router-outlet>
+    </div>
+</div>

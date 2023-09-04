@@ -1,0 +1,39 @@
+.box-bg--white-border, .company-type-overview {
+    background-color: white;
+    -webkit-transition: background-color 0.4s ease-out;
+    -moz-transition:    background-color 0.4s ease-out;
+    -ms-transition:     background-color 0.4s ease-out;
+    -o-transition:      background-color 0.4s ease-out;
+    transition:         background-color 0.4s ease-out;
+
+    hr {
+        -webkit-transition: border-top-color 0.4s ease-out;
+        -moz-transition:    border-top-color 0.4s ease-out;
+        -ms-transition:     border-top-color 0.4s ease-out;
+        -o-transition:      border-top-color 0.4s ease-out;
+        transition:         border-top-color 0.4s ease-out;
+    }
+
+    &:hover {
+        background-color: #dcdcdc;
+        
+        hr {
+            border-top-color: black;
+        }
+    }
+    
+}
+
+.company-type-overview-open {
+    background-color: #dcdcdc;
+}
+
+hr.title-separator {
+    margin: 15px 0px;
+}
+
+td.order-detail {
+    padding: 30px;
+    border: 1px solid #ccd4e4;
+    max-height: 0;
+}

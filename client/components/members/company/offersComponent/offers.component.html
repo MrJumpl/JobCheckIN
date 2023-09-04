@@ -1,0 +1,104 @@
+<div class="grid grid--middle">
+    <div class="grid__cell size--l--8-12 size--m--8-12 size--s--1-2 size--xs--1-2">
+        <h1 class="h2">Moje nabídky</h1>
+    </div>
+    <div class="grid__cell size--l--4-12 size--m--4-12 size--s--1-2 size--xs--1-2 right">
+        <p *ngIf="canCreate()">
+            <muniweb-button
+                label="Vytvořit"
+                [size]="MuniWebButtonSize.small"
+                (click)="redirectCreate()"
+            ></muniweb-button>
+        </p>
+    </div>
+</div>
+
+<muniweb-pagination [loading]="currentLoading" [pagesCount]="current?.paginationInfo?.pagesCount" (changePage)="loadCurrentPage($event)">
+    <h2 class="h3">Aktuální pozice</h2>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Název</th>
+                    <th>Počet zájemců</th>
+                    <th>Počet zobrazení</th>
+                    <th>Publikování</th>
+                    <th>Expirace</th>
+                    <th>Operace</th>
+                </tr>
+            </thead>
+            <tbody>
+                <ng-container *ngIf="current?.paginationInfo?.resultsCount > 0">
+                    <tr *ngFor="let wp of current.workPositions">
+                        <td class="middle">
+                            <a class="bold" [routerLink]="[ wp.workPositionId, jobchinRoutes.overview ]" (click)="currentActionClicked()">
+                                {{ wp.name }}
+                            </a>
+                        </td>
+                        <td class="middle">{{ wp.shownInterestCount }}</td>
+                        <td class="middle">{{ wp.viewsCount }}</td>
+                        <td class="middle nowrap">{{ wp.publication | date:'mediumDate' }}</td>
+                        <td class="middle nowrap">{{ wp.expiration | date:'mediumDate' }}</td>
+                        <td>
+                            <a [routerLink]="[ wp.workPositionId, jobchinRoutes.update ]" (click)="currentActionClicked()">Editovat</a>
+                            <ng-container *ngIf="canCreate()">
+                                <br />
+                                <a [routerLink]="[ wp.workPositionId, jobchinRoutes.duplicate ]" (click)="currentActionClicked()">Duplikovat</a>
+                            </ng-container>
+                        </td>
+                    </tr>
+                </ng-container>
+                <tr *ngIf="current?.paginationInfo?.resultsCount === 0">
+                    <td colspan="6">Nemáte žádné aktivní pracovní pozice</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</muniweb-pagination>
+
+<muniweb-pagination [loading]="archivedLoading" [pagesCount]="archived?.paginationInfo?.pagesCount" (changePage)="loadArchivedPage($event)">
+    <h2 class="h3">Archivní pozice</h2>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Název</th>
+                    <th>Počet zájemců</th>
+                    <th>Počet zobrazení</th>
+                    <th>Publikování</th>
+                    <th>Expirace</th>
+                    <th>Operace</th>
+                </tr>
+            </thead>
+            <tbody>
+                <ng-container *ngIf="archived?.paginationInfo?.resultsCount > 0">
+                    <tr *ngFor="let wp of archived.workPositions">
+                        <a class="bold" [routerLink]="[ wp.workPositionId, jobchinRoutes.overview ]" (click)="archiveActionClicked()">
+                            {{ wp.name }}
+                        </a>
+                        <td>{{ wp.shownInterestCount }}</td>
+                        <td>{{ wp.viewsCount }}</td>
+                        <td>{{ wp.publication | date:'mediumDate' }}</td>
+                        <td>{{ wp.expiration | date:'mediumDate' }}</td>
+                        <td>
+                            <a [routerLink]="[ wp.workPositionId, jobchinRoutes.duplicate ]" (click)="archiveActionClicked()">Duplikovat</a>
+                        </td>
+                    </tr>
+                </ng-container>
+                <tr *ngIf="archived?.paginationInfo?.resultsCount === 0">
+                    <td colspan="6">Nemáte žádné archivované pracovní pozice</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</muniweb-pagination>
+
+<!-- 
+<div *ngFor="let workPosition of getWorkPositions(); i as index">
+    <a 
+        [title]="workPosition.basicInfo.name"
+        [routerLink]="[ jobchinRoutes.update, workPosition.workPositionId ]"
+    >
+        {{workPosition.basicInfo.name}}
+    </a>
+</div> -->

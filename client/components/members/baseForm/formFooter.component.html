@@ -1,0 +1,16 @@
+<p  style="min-height: 44px;">
+    <muniweb-button
+        *ngIf="formConfig.onCallBack != null"
+        label="Zpět"
+        size="small"
+        (click)="formConfig.onCallBack()"
+    ></muniweb-button>
+
+    <muniweb-button
+        class="r"
+        size="small"
+        submit="true"
+        [label]="formConfig.submitButtonLabel"
+        [(state)]="formConfig.submitButtonState"
+    ></muniweb-button>
+</p>

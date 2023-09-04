@@ -1,0 +1,49 @@
+<div class="grid grid--center">
+    <div class="grid__cell size--l--6-12 size--m--8-12">
+        
+        <member-entry-menu 
+            [currentState]="EntyMenuState.signup"
+            [loginRouterLink]="RouterUtils.GetCompanyLoginRouterLink()"
+            [registerRouterLink]="RouterUtils.GetCompanyRegisterRouterLink()"
+        ></member-entry-menu>
+
+        <div [ngSwitch]="step">
+            <div *ngSwitchCase="RegistrationSteps.SignUp">
+                <muniweb-fieldset>
+                    <member-sign-up
+                        [signUpModel]="signUpModel"
+                        [providerIds]="[]"
+                        (signUp)="nextSignedUp($event)"
+                    ></member-sign-up>
+                </muniweb-fieldset>
+            </div>
+                
+            <div *ngSwitchCase="RegistrationSteps.ContactPerson">
+                <jobchin-company-contactPerson
+                    submitButtonLabel="Pokračovat"
+                    [standAlone]="false"
+                    [model]="contactPersonModel"
+                    [onCallBack]="backContactPerson"
+                    (onSubmit)="nextContactPerson($event)"
+                ></jobchin-company-contactPerson>
+            </div>
+
+            <div *ngSwitchCase="RegistrationSteps.GeneralInfo">
+                <jobchin-company-generalInfo *ngIf="!loadingInfoError"
+                    submitButtonLabel="Vytvořit účet"
+                    [standAlone]="false"
+                    [model]="generalInfoModel"
+                    [onCallBack]="backGeneralInfo"
+                    [onCallServer]="createAccount"
+                    (onSubmit)="nextSuccess($event)"
+                ></jobchin-company-generalInfo>
+            </div>
+
+            <div *ngSwitchCase="RegistrationSteps.Success">
+                <muniweb-notice noticeType="success">
+                    <p [innerHtml]="registrationSuccessful"></p>
+                </muniweb-notice>
+            </div>
+        </div>
+    </div>
+</div>

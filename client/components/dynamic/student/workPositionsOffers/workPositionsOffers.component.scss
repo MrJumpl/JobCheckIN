@@ -1,0 +1,20 @@
+div.btn-dropdown__menu {
+    width: 220px;
+}
+
+.grid__cell-mobile-hide {
+    display: none;
+}
+
+.grid__cell-mobile-only {
+    display: inline-block;
+}
+
+@media (min-width: 480px) {
+    .grid__cell-mobile-hide {
+        display: inline-block;
+    }
+    .grid__cell-mobile-only {
+        display: none;
+    }
+}

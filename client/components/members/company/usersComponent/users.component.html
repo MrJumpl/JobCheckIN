@@ -1,0 +1,199 @@
+<muniweb-fieldset>
+    <h3>Uživatelé</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Jméno uživatele</th>
+                <th>Role</th>
+                <th class="center">Změnit roli</th>
+                <th class="center">Smazat</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let user of getUsers()">
+                <td class="middle bold">{{ user.fullName }}</td>
+                <td class="middle">{{ getRoleDisplay(user.role) }}</td>
+                <td class="center" *ngIf="!isSameUser(user.memberId)">
+                    <muniweb-pop-up-button #editPopUp
+                        popupTitle="Změnění role"
+                        size="small"
+                        icon="icon-edit"
+                        (onOpenPopup)="onEditPopUpOpen(user.memberId, editPopUp)"
+                    >
+                        <muniweb-form #editForm
+                            [config]="editingStates[user.memberId].config"
+                            [formGroup]="editForm.form"
+                            [submitAttempt]="editForm.formSubmitAttempt"
+                        >
+                            <ng-container body>
+                                <muniweb-form-field
+                                    label="Role uživatele"
+                                    controlName="role"
+                                >
+                                    <span class="inp-fix inp-fix--select">
+                                        <ng-select
+                                            formControlName="role"
+                                            [multiple]="false"
+                                            [closeOnSelect]="true"
+                                            [items]="jobchinSettings.roleOptions"
+                                            bindLabel="displayValue"
+                                            bindValue="value"
+                                        ></ng-select>
+                                    </span>
+                                </muniweb-form-field>
+                            </ng-container>
+                        
+                            <p class="right" footer>
+                                <muniweb-button
+                                    size="small"
+                                    submit="true"
+                                    label="Uložit"
+                                    [(state)]="editingStates[user.memberId].state"
+                                ></muniweb-button>
+                            </p>
+                        </muniweb-form>
+                    </muniweb-pop-up-button>
+                </td>
+                <td class="center" *ngIf="!isSameUser(user.memberId)">
+                    <muniweb-pop-up-button #deletePopUp
+                        popupTitle="Smazání uživatele"
+                        size="small"
+                        label="X"
+                        (onOpenPopup)="onDeletePopUpOpen(user.memberId, deletePopUp)"
+                    >
+                        <h3>Opravdu chceta uživatele smazat?</h3>
+
+                        <muniweb-button
+                            class="u-pr-20"
+                            size="small"
+                            label="Ano"
+                            (click)="deleteUser(user.memberId)"
+                            [(state)]="deletingStates[user.memberId].state"
+                        ></muniweb-button>
+
+                        <muniweb-button
+                            size="small"
+                            label="Ne"
+                            (click)="closeDeletePopUp(user.memberId)"
+                        ></muniweb-button>
+
+                    </muniweb-pop-up-button>
+                </td>
+                <td class="center" *ngIf="isSameUser(user.memberId)" colspan="2">
+                    (nelze upravovat vlastní profil)
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr>
+
+    <ng-container *ngIf="!invitation.success">
+        <h3>Pozvat nového uživatele</h3>
+        
+        <muniweb-form #invForm
+                      [config]="invitation.config"
+                      [formGroup]="invForm.form"
+                      [submitAttempt]="invForm.formSubmitAttempt"
+        >
+            <ng-container body>
+                <div class="grid">
+                    <div class="grid__cell size--l--6-12">
+                        <muniweb-form-field
+                            label="E-mail"
+                            controlName="newEmail"
+                        >
+                            <input 
+                                formControlName="newEmail"
+                                class="inp-text">
+                        </muniweb-form-field>
+                    </div>
+                    <div class="grid__cell size--l--6-12">
+                        <muniweb-form-field
+                            label="Role uživatele"
+                            controlName="role"
+                        >
+                            <span class="inp-fix inp-fix--select">
+                                <ng-select
+                                    formControlName="role"
+                                    [multiple]="false"
+                                    [closeOnSelect]="true"
+                                    [items]="jobchinSettings.roleOptions"
+                                    bindLabel="displayValue"
+                                    bindValue="value"
+                                ></ng-select>
+                            </span>
+                        </muniweb-form-field>
+                    </div>
+                </div>
+            </ng-container>
+        
+            <p class="right" footer>
+                <muniweb-button
+                    size="small"
+                    submit="true"
+                    label="Poslat"
+                    [(state)]="invitation.state"
+                ></muniweb-button>
+            </p>
+        </muniweb-form>
+    </ng-container>
+
+    <ng-container *ngTemplateOutlet="successTmpl; context: {$implicit: invitation}"></ng-container>
+
+    <hr>
+
+    <ng-container *ngIf="!takeOver.success">
+        <h3>Předat firemní účet</h3>
+        <p>Po úspěšném předání ztratíte přístup k danému účtu.</p>
+        
+        <muniweb-form #form
+                      [config]="takeOver.config"
+                      [formGroup]="form.form"
+                      [submitAttempt]="form.formSubmitAttempt"
+        >
+            <ng-container body>
+                <muniweb-form-field
+                    label="E-mail"
+                    controlName="newEmail"
+                >
+                    <input 
+                        formControlName="newEmail"
+                        class="inp-text">
+                </muniweb-form-field>
+            </ng-container>
+        
+            <p class="right" footer>
+                <muniweb-button
+                    size="small"
+                    submit="true"
+                    label="Poslat"
+                    [(state)]="takeOver.state"
+                ></muniweb-button>
+            </p>
+        </muniweb-form>
+    </ng-container>
+
+    <ng-container *ngTemplateOutlet="successTmpl; context: {$implicit: takeOver}"></ng-container>
+</muniweb-fieldset>
+
+
+<ng-template let-cfg #successTmpl>
+    <ng-container *ngIf="cfg.success">
+        <muniweb-fieldset>
+            <p class="center">
+                <span class="icon icon-paper-plane" style="font-size: 60px;"></span>
+            </p>
+    
+            <p i18n="@@JobChIN_ChangeContactPersonSuccess">Pozvánku pro nového uživatele jsme odeslali na adresu<br/><span class="big">{{cfg.postedEmail}}</span></p>
+    
+            <hr/>
+            <p class="meta">
+                <span class="meta__item">
+                    <a href="javascript:void(0)" (click)="reset(cfg.cfg)" i18n="@@JobChIN_SendAgainLink">Odeslat znovu</a>
+                </span>
+            </p>
+        </muniweb-fieldset>
+    </ng-container>
+</ng-template>

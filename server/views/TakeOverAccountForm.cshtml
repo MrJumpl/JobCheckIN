@@ -1,0 +1,42 @@
+﻿@inherits GridEditorViewPage<IPublishedContent, JobChINSiteHelper, MuniWebGridConfig>
+@using Mlok.Web.Sites.Shared.MuniWeb;
+@using Mlok.Modules.WebData.Members;
+@using Mlok.Web.Sites.JobChIN.Constants;
+@using Mlok.Web.Sites.JobChIN;
+@using Mlok.Web.Sites.JobChIN.Models;
+@{
+    var token = Param<string>(SiteConstants.TakeOverParam);
+
+    InviteCompanyUserModel tokenModel = null;
+    var tokenValid = Site.JobChINModule.MembersPlugin.CheckNewUserToken(token, out tokenModel);
+
+    switch (tokenValid)
+    {
+        case TokenValidationState.None:
+        case TokenValidationState.Invalid:
+            @RenderInvalidState();
+            break;
+        case TokenValidationState.Ok:
+            var companyName = Site.JobChINModule.CompanyService.CompanyController.GetById(tokenModel.CompanyId).GeneralInfo.CompanyName;
+            Html.RenderAngularComponent(Site.JobChINModule.MembersPlugin, "CompanyNewUserComponent", new
+            {
+                token,
+                email = tokenModel.Email,
+                companyName,
+            });
+            break;
+    }
+}
+
+@helper RenderInvalidState()
+{
+    <div class="message message--warning" role="alert">
+        <span class="message__icon icon icon-exclamation-triangle"></span>
+        <h2 class="message__title">
+            Nesprávný link
+        </h2>
+        <p class="message__desc">
+            Platnost linku již vypršela nebo je špatně opsaný.
+        </p>
+    </div>
+}

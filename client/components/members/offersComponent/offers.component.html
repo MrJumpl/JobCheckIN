@@ -1,0 +1,6 @@
+<ng-container *ngIf="isStudent(); else companyTemplate">
+    <jobchin-student-offers></jobchin-student-offers>
+</ng-container>
+<ng-template #companyTemplate>
+    <jobchin-company-offers></jobchin-company-offers>
+</ng-template>

@@ -1,0 +1,105 @@
+<h3>Detail pracovní pozice</h3>
+
+<muniweb-form #form
+              [config]="formConfig"
+              [formGroup]="form.form"
+              [submitAttempt]="form.formSubmitAttempt"
+>
+    <ng-container body>
+        <muniweb-form-field 
+            id="companyDescription"
+            label="Představení společnosti"
+            controlName="companyDescription"
+        >
+            <textarea 
+                class="inp-text"
+                rows="3"
+                formControlName="companyDescription"
+                [maxLength]="jobchinSettings.descMaxLength"
+            ></textarea>
+        </muniweb-form-field>
+        
+        <muniweb-form-field id="description"
+            label="Popis pracovní pozice"
+            controlName="description"
+        >
+            <muniweb-rte 
+                formControlName="description"
+                [maxLength]="jobchinSettings.rteLettersMaxLength"
+                [tinyConfig]="tinyConfig"
+            ></muniweb-rte>
+        </muniweb-form-field>
+        
+        <muniweb-form-field 
+            id="requesting"
+            label="Požadujeme"
+            controlName="requesting"
+        >
+            <muniweb-rte 
+                formControlName="requesting"
+                [maxLength]="jobchinSettings.rteLettersMaxLength"
+                [tinyConfig]="tinyConfig"
+            ></muniweb-rte>
+        </muniweb-form-field>
+        
+        <muniweb-form-field 
+            id="offering"
+            label="Nabízíme"
+            controlName="offering"
+        >
+            <muniweb-rte 
+                formControlName="offering"
+                [maxLength]="jobchinSettings.rteLettersMaxLength"
+                [tinyConfig]="tinyConfig"
+            ></muniweb-rte>
+        </muniweb-form-field>
+
+        <muniweb-form-field id="customFields"
+            label="Další sekce"
+            controlName="customFields"
+        >
+            <jobchin-accordionList
+                addButtonLabel="Přidat další sekci"
+                removeButtonLabel="Odebrat sekci"
+                maxItems="3"
+                [itemForm]="item"
+                [formArray]="customFields"
+                [getTitle]="getTitle"
+                (add)="addField()"
+                (remove)="removeField($event)"
+            ></jobchin-accordionList>
+        </muniweb-form-field>
+    </ng-container>
+
+    <jobchin-formFooter footer
+        [formConfig]="formConfig">
+    </jobchin-formFooter>
+</muniweb-form>
+
+<ng-template #item let-i [formGroup]="form.form" [submitAttempt]="form.formSubmitAttempt">
+    <ng-container formArrayName="customFields">
+        <div [formGroupName]="i">
+            <muniweb-form-field
+                id="name"
+                label="Název sekce"
+                controlName="name"
+            >
+                <input
+                    formControlName="name"
+                    class="inp-text"
+                    [maxLength]="jobchinSettings.customFieldNameMaxLength"
+                >
+            </muniweb-form-field>
+
+            <muniweb-form-field id="value"
+                controlName="value"
+            >
+                <muniweb-rte 
+                    formControlName="value"
+                    [maxLength]="jobchinSettings.rteLettersMaxLength"
+                    [tinyConfig]="tinyConfig"
+                ></muniweb-rte>
+            </muniweb-form-field>
+        </div>
+    </ng-container>
+</ng-template>

@@ -1,0 +1,28 @@
+<h1 class="h3 u-mb-50">{{profile.company.model.generalInfo.companyName}} <span class="thin">&ndash; osobní účet</span></h1>
+
+<div class="grid grid--xl">
+    <div class="grid__cell size--l--3-12 size--m--4-12">
+        <member-menu>
+            <side-menu-item
+                [routerLink]="jobchinRoutes.generalInfo"
+                title="Základní informace"
+            ></side-menu-item>
+            <side-menu-item
+                [routerLink]="jobchinRoutes.presentation"
+                title="Prezentace"
+            ></side-menu-item>
+            <side-menu-item
+                [routerLink]="jobchinRoutes.branches"
+                title="Pobočky"
+            ></side-menu-item>
+            <side-menu-item
+                [routerLink]="jobchinRoutes.candidates"
+                title="Uchazeči"
+            ></side-menu-item>
+        </member-menu>
+    </div>
+
+    <div class="grid__cell size--l--9-12 size--m--8-12">
+        <router-outlet></router-outlet>
+    </div>
+</div>

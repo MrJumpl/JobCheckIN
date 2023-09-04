@@ -1,0 +1,9 @@
+﻿@inherits GridEditorViewPage<IPublishedContent, JobChINSiteHelper, MuniWebGridConfig>
+@using Umbraco.Web.PublishedCache;
+@using Mlok.Web.Sites.Shared.MuniWeb;
+@using Mlok.Modules.WebData.Members;
+@using Mlok.Web.Sites.JobChIN.Constants;
+@using Mlok.Web.Sites.JobChIN;
+@{
+    Html.RenderAngularComponent(Site.JobChINModule, "StudentCompanyListComponent", Site.JobChINModule.GetCompanyListConfig());
+}

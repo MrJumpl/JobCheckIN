@@ -1,0 +1,21 @@
+.grid__cell {
+    margin-bottom: 15px;
+}
+
+.langPicker__removeGrid {
+    text-align: center;
+}
+
+.langPicker__remove {
+    text-decoration: none;
+    color: red;
+}
+.langPicker__add {
+    margin-left: 20px;
+    text-decoration: none;
+    color: green;
+}
+
+.error .langPicker__error .ng-select-container {
+    border: 1px solid red;
+}

@@ -1,0 +1,21 @@
+<muniweb-notice
+    *ngIf="loading"
+    noticeType="info"
+>
+    <p>
+        Probíhá přihlašování...
+    </p>
+</muniweb-notice> 
+
+<div *ngIf="!loading">
+    <muniweb-notice
+        *ngIf="serverExternalError || accessExpired"
+        noticeType="error"
+        [message]="externalErrorMessages"
+    ></muniweb-notice> 
+
+    <muni-login-provider *ngIf="serverExternalError"
+        [returnRoute]="this.router.url"
+        (login)="login()"
+    ></muni-login-provider>
+</div>

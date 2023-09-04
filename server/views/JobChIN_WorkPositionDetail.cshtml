@@ -1,0 +1,293 @@
+﻿@inherits GridEditorViewPage<WorkPositionDetailDto, JobChINSiteHelper, MuniWebGridConfig>
+@using System.Threading;
+@using System.Globalization;
+@using Mlok.Web.Sites.Shared.MuniWeb;
+@using Mlok.Web.Sites.JobChIN;
+@using Mlok.Web.Sites.JobChIN.Models.WorkPositionModels;
+@using Mlok.Web.Sites.JobChIN.Models.Dtos;
+@functions {
+    int index = 0;
+    IEnumerable<string> hardSkills;
+    IEnumerable<Tuple<WorkPositionLanguageModel, string>> languages;
+    IEnumerable<string> softSkills;
+    IEnumerable<string> faculties;
+}
+@{
+    var currentCulture = Thread.CurrentThread.CurrentCulture;
+    Thread.CurrentThread.CurrentCulture = new CultureInfo(Model.WorkPosition.BasicInfo.Language);
+
+    var module = Site.JobChINModule;
+    string locationId = null;
+    if (Model.WorkPosition.BasicInfo?.BranchId.HasValue ?? false)
+    {
+        var branch = module.CompanyService.GetBranch(Model.Company.CompanyId, Model.WorkPosition.BasicInfo.BranchId.Value);
+        locationId = branch?.LocationId;
+    }
+    if (locationId == null)
+    {
+        locationId = Model.WorkPosition.BasicInfo?.LocationId;
+    }
+    var location = module.LocalAdministrativeUnitsController.GetName(locationId);
+    var contractTypes = string.Join(", ", module.ContractTypeController.GetByIds(Model.WorkPosition.BasicInfo?.ContractTypes).Select(x => x.Name.ToString()));
+    var areaOfInterests = module.AreaOfInterestController.GetByIds(Model.WorkPosition.Candidates?.AreaOfInterests).Select(x => x.Name.ToString());
+    hardSkills = module.HardSkillController.GetByIds(Model.WorkPosition.Candidates?.HardSkills).Select(x => x.Name.ToString());
+    languages = module.LanguageController.GetDisplayLanguages(Model.WorkPosition.Candidates?.Languages);
+    softSkills = module.HardSkillController.GetByIds(Model.WorkPosition.Candidates?.HardSkills).Select(x => x.Name.ToString());
+    faculties = module.FacultyController.GetPicker().Where(x => Model.WorkPosition.Candidates?.Faculties?.Contains(x.Value) ?? false).Select(x => x.DisplayValue);
+}
+
+<div class="box-bg box-bg--fss">
+    <div class="row-main">
+        <div class="box-content white">
+            <h1>@Model.WorkPosition.BasicInfo.Name</h1>
+        </div>
+
+        <div class="grid grid--xl">
+            <div class="grid__cell size--m--7-12 size--s--1-2 ">
+                <div class="grid">
+                    <div class="grid__cell size--l--10-12 size--m--8-12 ">
+                        <div class="box-content u-mb-0 white">
+                            <p>
+                                <span class="icon-user-alt icon icon-muniweb-user-alt icon-muniweb u-pr-10"></span> <strong><a href="#" data-anchor="#">@Model.Company.GeneralInfo.CompanyName</a></strong>
+                                <br>
+                                @if (locationId != null)
+                                {
+                                    @:&nbsp;<span class="icon-map-pin icon icon-muniweb-map-pin icon-muniweb u-pr-10"></span> @location
+                                    <br>
+                                }
+                                <span class="icon-home icon icon-muniweb-home icon-muniweb u-pr-10"></span> @Model.WorkPosition.BasicInfo.Remote.GetDisplayName()
+                                <br>
+                                <span class="icon-clock icon icon-muniweb-clock icon-muniweb u-pr-10"></span> @contractTypes
+                            </p>
+                            @if (areaOfInterests.Any())
+                            {
+                                bool first = true;
+                                <hr>
+                                <p>
+                                    @foreach (var areaOfInterest in areaOfInterests)
+                                    {
+                                        if (!first)
+                                        {
+                                            <br>
+                                        }
+                                        <span class="icon-bookmark icon icon-muniweb-bookmark icon-muniweb u-pr-10"></span> @areaOfInterest
+                                        first = false;
+                                    }
+                                </p>
+                            }
+
+                        </div>
+
+                    </div>
+                    <div class="grid__cell size--l--2-12 size--m--4-12 ">
+                    </div>
+                </div>
+
+            </div>
+            <div class="grid__cell size--m--5-12 size--s--1-2 ">
+
+                @if (Model.IsStudent)
+                {
+                    var student = module.StudentService.GetCurrentDetailed();
+
+
+                    Html.RenderAngularComponent(Site.JobChINModule, "StudentShowInterestComponent",  new
+                    {
+                        Model.WorkPosition.WorkPositionId,
+                        Model.WorkPosition.CandidateRequest.CoverLetter,
+                        Model.WorkPosition.CandidateRequest.AdditionalQuestions,
+                        Favorite = module.StudentService.HasFavoriteWorkPosition(student.StudentId, Model.WorkPosition.WorkPositionId),
+                        HasShownInterest = module.StudentService.HasShownInterest(Model.WorkPosition.WorkPositionId, student.StudentId),
+                        ShowInterestText = module.Settings.ShowInterestText(student.Completeness(), Model.Company.GeneralInfo.CompanyName),
+                        ProfileRoute = module.MembersPlugin.AngularAppNode.Url + module.Settings.RouteStudentCV,
+                    });
+                }
+                else
+                {
+                    <p class="btn-wrap btn-wrap--wide">
+                        <a class="btn btn-primary link-slide" href="#">
+                            <span>
+                                Mám zájem
+                            </span>
+                        </a>
+                        <a class="btn btn-white btn-border link-slide" href="#">
+                            <span>
+                                <span class="icon-heart icon"> </span>
+                                Přidat do oblíbených
+                            </span>
+                        </a>
+                    </p>
+                }
+
+                <div class="box-content u-mb-0 u-pb-0 white">
+
+                    <p>
+                        Vloženo: @Model.WorkPosition.BasicInfo.Publication.ToString("d. M. yyyy")
+                        <br>
+                        Nabídka expiruje: @Model.WorkPosition.BasicInfo.Expiration.ToString("d. M. yyyy")
+                    </p>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row-main">
+    @{
+        @RenderSection("Kdo jsme", Model.WorkPosition.Detail?.CompanyDescription, includeCompany: true)
+
+        @RenderSection("Náplň práce", Model.WorkPosition.Detail?.Description)
+
+        @RenderSection("Požadujeme", Model.WorkPosition.Detail?.Requesting, includeSkills: true)
+
+        @RenderSection("Nabízíme", Model.WorkPosition.Detail?.Offering)
+
+        @RenderSection(Model.WorkPosition.Detail?.CustomField1Name, Model.WorkPosition.Detail?.CustomField1Value)
+        
+        @RenderSection(Model.WorkPosition.Detail?.CustomField2Name, Model.WorkPosition.Detail?.CustomField2Value)
+        
+        @RenderSection(Model.WorkPosition.Detail?.CustomField3Name, Model.WorkPosition.Detail?.CustomField3Value)
+    }
+</div>
+
+@{
+    Thread.CurrentThread.CurrentCulture = currentCulture;
+}
+
+@helper RenderSection(string name, string content, bool includeCompany = false, bool includeSkills = false)
+{
+    if (StrUtils.StripTags(content).IsNullOrWhiteSpace() && !includeCompany && !includeSkills)
+    {
+        return;
+    }
+
+    string styles;
+    if (index % 2 == 0)
+    {
+        styles = "box-bg box-bg--grey-light box-bg--medium u-mb-0 u-pb-0";
+    }
+    else
+    {
+        styles = "box-bg box-bg--muni-border box-bg--medium";
+    }
+
+
+    <div class="@styles">
+        <div class="grid">
+            <div class="grid__cell size--l--4-12 size--m--5-12 ">
+                <div class="box-content">
+                    <h3>@name</h3>
+                </div>
+            </div>
+            <div class="grid__cell size--l--8-12 size--m--7-12 ">
+                <div class="box-content u-mb-30">
+
+                    @Html.Raw(content)
+
+                    @if (includeCompany)
+                    {
+                        <!-- TODO link to company -->
+                        <p class="right">
+                            <a href="#" data-anchor="#"><span class="icon-arrow-right icon icon-muniweb-arrow-right icon-muniweb u-pr-10"></span>Zjistit více</a>
+                        </p>
+                    }
+
+                    @if (includeSkills)
+                    {
+                        bool first = true;
+                        if (hardSkills.Any())
+                        {
+                            if (!first)
+                            {
+                                <hr />
+                            }
+                            first = false;
+                            <h4>Klíčové znalosti a dovednosti</h4>
+                            <p>
+                                @foreach (var hardSkill in hardSkills)
+                                {
+                                    <em>@hardSkill</em>
+                                }
+                            </p>
+                        }
+                        if (languages.Any())
+                        {
+                            if (!first)
+                            {
+                                <hr />
+                            }
+                            first = false;
+
+                            <h4>Jazyky</h4>
+
+                            @RenderLanguageTable("Vyžadované jazyky:", languages.Where(x => !x.Item1.Optional))
+                            @RenderLanguageTable("Výhodou když umíš:", languages.Where(x => x.Item1.Optional))
+                        }
+                        if (softSkills.Any())
+                        {
+                            if (!first)
+                            {
+                                <hr />
+                            }
+                            first = false;
+                            <h4>Měkké dovednosti</h4>
+                            <p>
+                                @foreach (var softSkill in softSkills)
+                                {
+                                    <em>@softSkill</em>
+                                }
+                            </p>
+
+                        }
+                        if (faculties.Any())
+                        {
+                            if (!first)
+                            {
+                                <hr />
+                            }
+                            first = false;
+                            <h4>Pro studenty a absolventy</h4>
+                            <ul>
+                                @foreach (var faculty in faculties)
+                                {
+                                    <li>@faculty</li>
+                                }
+                            </ul>
+
+                        }
+                    }
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    index++;
+}
+
+@helper RenderLanguageTable(string header, IEnumerable<Tuple<WorkPositionLanguageModel, string>> langs)
+{
+    if (!(languages?.Any() ?? false))
+    {
+        return;
+    }
+    bool first = true;
+
+    <table border="0" class="table-condensed u-mb-0">
+        <tbody>
+            @foreach (var lang in langs)
+            {
+                <tr>
+                    <th>@(first ? header : "")</th>
+                    <td class="nowrap">@lang.Item2</td>
+                </tr>
+
+                first = false;
+            }
+        </tbody>
+    </table>
+}

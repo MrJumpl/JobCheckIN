@@ -1,0 +1,45 @@
+﻿@inherits GridEditorViewPage<IPublishedContent, JobChINSiteHelper, MuniWebGridConfig>
+@using Mlok.Web.Sites.Shared.MuniWeb;
+@using Mlok.Web.Sites.JobChIN;
+@using Mlok.Web.Sites.JobChIN.Models.Dtos;
+@{
+    var module = Site.JobChINModule;
+    var student = module.StudentService.GetCurrent();
+    int workPostionId = Param<int>("workPositionId");
+
+    var workPosition = module.WorkPositionService.GetStudentView(workPostionId, student.StudentId);
+
+    if (workPosition == null || workPosition.BasicInfo.Publication > DateTime.Now)
+    {
+        PageConfig.SetDataNotFound();
+    }
+    else if (workPosition.BasicInfo.Expiration < DateTime.Now)
+    {
+        @RenderExpired();
+    }
+    else
+    {
+        @Html.Partial(Site.PartialViews().JobChIN_WorkPositionDetailView, new WorkPositionDetailDto()
+        {
+            WorkPosition = workPosition,
+            Company = module.CompanyService.CompanyController.GetById(workPosition.CompanyId.Value),
+            IsStudent = true,
+        });
+    }
+
+}
+
+@helper RenderExpired()
+{
+    <div class="u-mt-30">
+        <div class="message message--warning " role="alert">
+            <span class="message__icon icon icon-exclamation-triangle"></span>
+            <h2 class="message__title">
+                Pracovní pozice již expirovala
+            </h2>
+            <p class="message__desc">
+                <!-- todo text -->
+            </p>
+        </div>
+    </div>
+}

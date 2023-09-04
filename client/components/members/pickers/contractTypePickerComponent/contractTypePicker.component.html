@@ -1,0 +1,15 @@
+    
+<muniweb-form-field id="countryId"
+                label="Typ pracovního úvazku"
+                [controlName]="controlName"
+>
+    <span class="inp-fix inp-fix--select">
+        <ng-select [formControl]="getFormControl()"
+            [multiple]="true"
+            [closeOnSelect]="true"
+            [items]="getContractTypes()"
+            bindLabel="name"
+            bindValue="contractTypeId"
+        ></ng-select>
+    </span>
+</muniweb-form-field>     

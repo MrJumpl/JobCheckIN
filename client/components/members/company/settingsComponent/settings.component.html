@@ -1,0 +1,29 @@
+<h1 class="h3 u-mb-50">{{getName()}} <span class="thin">&ndash; osobní účet</span></h1>
+
+
+<div class="grid grid--xl">
+    <div class="grid__cell size--l--3-12 size--m--4-12">
+        <member-menu>
+            <side-menu-item *ngIf="isCompanyAdmin()"
+                [routerLink]="jobchinRoutes.companyType"
+                title="Typ účtu"
+            ></side-menu-item>
+            <side-menu-item *ngIf="isCompanyAdmin()"
+                [routerLink]="jobchinRoutes.users"
+                title="Uživatelé"
+            ></side-menu-item>
+            <side-menu-item
+                [routerLink]="jobchinRoutes.contactPerson"
+                title="Kontaktní osoba"
+            ></side-menu-item>
+            <side-menu-item
+                [routerLink]="jobchinRoutes.notification"
+                title="Nastavení notifikací"
+            ></side-menu-item>
+        </member-menu>
+    </div>
+
+    <div class="grid__cell size--l--9-12 size--m--8-12">
+        <router-outlet></router-outlet>
+    </div>
+</div>

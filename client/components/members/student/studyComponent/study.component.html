@@ -1,0 +1,180 @@
+<muniweb-fieldset>
+    <!-- <h3>Vzdělání</h3>
+    <ng-container *ngFor="let study of studies; index as i">
+        <hr *ngIf="i > 0">
+        <p class="u-mb-0">
+            <span class="bold">
+                {{study.faculty}} - {{study.programme}} ({{study.degree}})
+            </span>
+            <br>
+            Masarykova univerzita, Brno
+            (<span class="nowrap">{{study.from | date: 'mediumDate'}}</span>
+            –
+            <span class="nowrap" *ngIf="study.to">{{study.to | date: 'mediumDate'}}</span>
+            <span *ngIf="!study.to">současnost</span>
+            <span>)</span>
+            <br>
+            <span i18n="@@JobChIN.studyFields">{study.fields.length, plural, =1 {Obor} other {Obory}}</span>
+            :
+            {{getStudyFields(study)}}
+        </p>
+    </ng-container> -->
+
+    <muniweb-form
+        #form
+        [config]="formConfig"
+        [formGroup]="form.form"
+        [submitAttempt]="form.formSubmitAttempt"
+    >
+        <ng-container body>
+            <h3>Studium na jiné VŠ</h3>
+
+            <jobchin-accordionList
+                addButtonLabel="Přidat školu"
+                removeButtonLabel="Odebrat univerzitu"
+                [itemForm]="os"
+                [formArray]="otherStudies"
+                [getTitle]="getOtherStudyTitle"
+                [isNew]="createOpen"
+                (add)="addStudy()"
+                (remove)="removeStudy($event)"
+            ></jobchin-accordionList>
+
+            <hr />
+            
+            <h3>Kurzy</h3>
+            <muniweb-form-field
+                id="additionalEducation"
+                [description]="formDescriptions.aditionalEducation"
+                controlName="additionalEducation"
+            >
+                <muniweb-rte 
+                    formControlName="additionalEducation"
+                    maxLength="2000"
+                    [tinyConfig]="tinyConfig"
+                ></muniweb-rte>
+            </muniweb-form-field>
+        </ng-container>
+
+        <jobchin-formFooter
+            footer
+            [formConfig]="formConfig"
+        >
+        </jobchin-formFooter>
+    </muniweb-form>
+</muniweb-fieldset>
+
+<ng-template #os let-i let-item="item" [formGroup]="form.form" [submitAttempt]="form.formSubmitAttempt">
+    <ng-container formArrayName="otherStudies">
+        <div [formGroupName]="i">
+            <muniweb-form-field
+                id="university"
+                label="Škola"
+                required="true"
+                controlName="university"
+            >
+                <input
+                    formControlName="university"
+                    class="inp-text"
+                    [maxLength]="jobchinSettings.otherStudyMaxLength"
+                >
+            </muniweb-form-field>
+            
+            <div class="grid">
+                <div class="grid__cell size--l--6-12">
+                    <muniweb-form-field
+                        id="faculty"
+                        label="Fakulta"
+                        controlName="faculty"
+                    >
+                        <input
+                            formControlName="faculty"
+                            class="inp-text"
+                            [maxLength]="jobchinSettings.otherStudyMaxLength"
+                        >
+                    </muniweb-form-field>
+                </div>
+                <div class="grid__cell size--l--6-12">
+                    <muniweb-form-field
+                        id="specialization"
+                        label="Obor"
+                        required="true"
+                        controlName="specialization"
+                    >
+                        <input
+                            formControlName="specialization"
+                            class="inp-text"
+                            [maxLength]="jobchinSettings.otherStudyMaxLength"
+                        >
+                    </muniweb-form-field>
+                </div>
+            </div>
+            <div class="grid">
+                <div class="grid__cell size--l--6-12">
+                    <muniweb-form-field
+                        id="city"
+                        label="Místo"
+                        controlName="city"
+                    >
+                        <input
+                            formControlName="city"
+                            class="inp-text"
+                            [maxLength]="jobchinSettings.studentCityMaxLength"
+                        >
+                    </muniweb-form-field>
+                </div>
+                <div class="grid__cell size--l--6-12">
+                    <jobchin-coutry-picker controlName="countryId"></jobchin-coutry-picker>
+                </div>
+            </div>
+            <div class="grid grid--middle grid--right">
+                <div class="grid__cell size--l--6-12">
+                    <muniweb-form-field
+                        id="from"
+                        label="Studoval/a jsem tady od"
+                        controlName="from"
+                    >
+                        <muniweb-datetime
+                            formControlName="from"
+                        ></muniweb-datetime>
+                    </muniweb-form-field>
+                </div>
+                <div class="grid__cell size--l--6-12 size--m--2-4" *ngIf="showTo(item)">
+                    <muniweb-form-field
+                        id="to"
+                        label="Do"
+                        description=""
+                        controlName="to"
+                    >
+                        <muniweb-datetime
+                            formControlName="to"
+                        ></muniweb-datetime>
+                    </muniweb-form-field>
+                </div>
+                <div class="grid__cell size--l--6-12 size--m--2-4" [ngClass]="{ 'u-mb-30': !showTo(item) }" >
+                    <label class="inp-item inp-item--checkbox">
+                        <input type="checkbox"
+                                formControlName="stillStudy">
+                        <span>
+                            Stále studuji
+                        </span>
+                    </label>
+                </div>
+            </div>
+            <muniweb-form-field
+                id="language"
+                label="Jazyk"
+                controlName="language"
+            >
+                <ng-select
+                    bindLabel="name"
+                    bindValue="languageId"
+                    [multiple]="false"
+                    [closeOnSelect]="true"
+                    [items]="getLanguages()"
+                    formControlName="languageId"
+                ></ng-select>
+            </muniweb-form-field>
+        </div>
+    </ng-container>
+</ng-template>

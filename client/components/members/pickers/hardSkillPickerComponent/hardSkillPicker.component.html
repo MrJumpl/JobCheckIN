@@ -1,0 +1,60 @@
+<ng-select
+    [multiple]="false"
+    [closeOnSelect]="true"
+    [items]="getAreaOfInterests()"
+    [readonly]="disabled"
+    [(ngModel)]="areaOfInterest"
+    (ngModelChange)="onAreaOfInterestChanged($event)"
+    bindLabel="name"
+    bindValue="areaOfInterestId"
+    placeholder="Filtrovat podle oblasti zájmu..."
+    class="hardskill-filter"
+></ng-select>
+
+<ng-select
+    [multiple]="true"
+    [closeOnSelect]="false"
+    [hideSelected]="true"
+    [items]="hardSkills"
+    [readonly]="disabled"
+    [(ngModel)]="value"
+    bindLabel="name"
+    bindValue="hardSkillId"
+    placeholder="Vyberte dovednost..."
+></ng-select>
+
+<table>
+    <tbody>
+        <tr>
+            <td>
+                <span class="small">Chybí Vám v seznamu nějaká znalost nebo dovednost a myslíte si, že by v něm měla být? Navrhněte ji zde a pokud v portálu nebudeme mít jeji alternativu, rádi ji přidáme.</span>
+            </td>
+            <td>
+
+                <muniweb-pop-up-button
+                    size="small"
+                    label="Navrhnout"
+                    popupTitle="Navrhnout"
+                >
+                    <muniweb-form #form
+                        [config]="formConfig"
+                        [formGroup]="form.form"
+                        [submitAttempt]="form.formSubmitAttempt">
+                        <ng-container body>
+                            <muniweb-form-field id="name"
+                                label="Název dovednosti"
+                                controlName="name">
+                                <input formControlName="name"
+                                        class="inp-text">
+                            </muniweb-form-field>
+                        </ng-container>
+                        <jobchin-formFooter footer
+                            [formConfig]="formConfig">
+                        </jobchin-formFooter>
+                    </muniweb-form>
+                </muniweb-pop-up-button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+

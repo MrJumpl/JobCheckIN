@@ -1,0 +1,190 @@
+<form
+    class="filter-form"
+    [formGroup]="searchForm"
+    (submit)="search()"
+>
+    <h3>Vyhledejte studenta</h3>
+    <div class="grid grid--middle">
+        <div class="grid__cell size--l--3-12">
+            <muniweb-form-field id="contractTypes"
+                                label="Typ úvazku"
+                                controlName="contractTypes">
+                <span class="inp-fix inp-fix--select">
+                    <ng-select
+                        formControlName="contractTypes"
+                        [multiple]="true"
+                        [closeOnSelect]="false"
+                        [items]="config.contractTypes"
+                        bindLabel="name"
+                        bindValue="contractTypeId"
+                    ></ng-select>
+                </span>
+            </muniweb-form-field>
+        </div>
+        <div class="grid__cell size--l--3-12">
+            <muniweb-form-field id="areaOfInterests"
+                                label="Oblast zájmu"
+                                controlName="areaOfInterests">
+                <span class="inp-fix inp-fix--select">
+                    <ng-select
+                        formControlName="areaOfInterests"
+                        [multiple]="true"
+                        [closeOnSelect]="false"
+                        [items]="config.areaOfInterests"
+                        bindLabel="name"
+                        bindValue="areaOfInterestId"
+                    ></ng-select>
+                </span>
+            </muniweb-form-field>
+        </div>
+        <div class="grid__cell size--l--3-12">
+            <muniweb-form-field
+                id="faculties"
+                label="Fakulta"
+                controlName="faculties"
+            >
+                <span class="inp-fix inp-fix--select">
+                    <ng-select
+                        formControlName="faculties"
+                        placeholder="Bez preferencí"
+                        [multiple]="true"
+                        [closeOnSelect]="false"
+                        [items]="config.faculties"
+                        bindLabel="displayValue"
+                        bindValue="value"
+                    ></ng-select>
+                </span>
+            </muniweb-form-field>
+        </div>
+        <div class="grid__cell size--l--3-12">
+            <muniweb-form-field
+                id="hardSkills"
+                label="Tvrdé dovednosti"
+                controlName="hardSkills"
+            >
+                <span class="inp-fix inp-fix--select">
+                    <ng-select
+                        formControlName="hardSkills"
+                        [multiple]="true"
+                        [closeOnSelect]="false"
+                        [items]="config.hardSkills"
+                        bindLabel="name"
+                        bindValue="hardSkillId"
+                    ></ng-select>
+                </span>
+            </muniweb-form-field>
+        </div>
+        <div class="grid__cell size--l--3-12">
+            <muniweb-form-field
+                id="softSkills"
+                label="Měkké dovednosti"
+                controlName="softSkills"
+            >
+                <span class="inp-fix inp-fix--select">
+                    <ng-select
+                        formControlName="softSkills"
+                        [multiple]="true"
+                        [closeOnSelect]="false"
+                        [items]="config.softSkills"
+                        bindLabel="name"
+                        bindValue="softSkillId"
+                    ></ng-select>
+                </span>
+            </muniweb-form-field>
+        </div>
+        <div class="grid__cell size--l--3-12">
+            <muniweb-form-field id="languages"
+                                label="Jazyky"
+                                controlName="languages">
+                <span class="inp-fix inp-fix--select">
+                    <ng-select
+                        formControlName="languages"
+                        [multiple]="true"
+                        [closeOnSelect]="false"
+                        [items]="config.languages"
+                        bindLabel="name"
+                        bindValue="languageId"
+                    ></ng-select>
+                </span>
+            </muniweb-form-field>
+        </div>
+        <div class="grid__cell size--l--3-12">
+            <muniweb-form-field
+                label="Řidičský průkaz"
+            >
+                <p>
+                    <label class="inp-item inp-item--checkbox">
+                        <input
+                            type="checkbox"
+                            formControlName="drivingLicense"
+                        >
+                        <span>
+                            Ano
+                        </span>
+                    </label>
+                </p>
+            </muniweb-form-field>
+        </div>
+        <div class="grid__cell size--l--3-12" *ngIf="showActiveDriver">
+            <muniweb-form-field
+                label="Aktivní řidič"
+            >
+                <p *ngIf="showActiveDriver">
+                    <label class="inp-item inp-item--checkbox">
+                        <input
+                            type="checkbox"
+                            formControlName="activeDriver"
+                        >
+                        <span>
+                            Ano
+                        </span>
+                    </label>
+                </p>
+            </muniweb-form-field>
+        </div>
+    </div>
+
+
+    <p>
+        <muniweb-button
+            size="small"
+            submit="true"
+            label="Zobrazit studenty"
+        ></muniweb-button>
+    </p>
+</form>
+
+<muniweb-pagination [loading]="studentsLoading" [pagesCount]="students?.paginationInfo?.pagesCount" (changePage)="loadPage($event)">
+    <h2 class="h3">Studenti</h2>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Uchazeč</th>
+                    <th>Shoda</th>
+                </tr>
+            </thead>
+            <tbody>
+                <ng-container *ngIf="students?.paginationInfo?.resultsCount > 0">
+                    <tr *ngFor="let student of students.students; index as i">
+                        <td>
+                            <span class="student-checkbox">
+                                <jobchin-student-photo
+                                    [studentId]="student.studentId"
+                                    [fullName]="student.fullName"
+                                    [photoLink]="student.photoLink"
+                                    [cardClickable]="true"
+                                    (onCardClick)="redirectStudentDetail()"
+                                ></jobchin-student-photo>
+                            </span>
+                        </td>
+                        <td class="center middle"><span class="match match-{{ student.match }}"></span></td>
+                    </tr>
+                </ng-container>
+                <tr *ngIf="students?.paginationInfo?.resultsCount === 0">
+                    <td colspan="3">Nikdo nevyhovuje zadaným kritériím</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</muniweb-pagination>

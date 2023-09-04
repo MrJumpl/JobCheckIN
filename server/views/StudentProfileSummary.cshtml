@@ -1,0 +1,129 @@
+﻿@inherits GridEditorViewPage<IPublishedContent, JobChINSiteHelper, MuniWebGridConfig>
+@using Mlok.Web.Sites.Shared.MuniWeb;
+@using Mlok.Web.Sites.JobChIN;
+@using UmbracoConstants = Umbraco.Core.Constants;
+@{
+    var module = Site.JobChINModule;
+    var student = module.StudentService.GetCurrentDetailed();
+
+    var memberZoneUrl = module.MembersPlugin.AngularAppNode.Url;
+
+    var contractTypes = module.ContractTypeController.GetAll();
+    var areaOfInterests = module.AreaOfInterestController.GetAll();
+
+    var studentContractTypes = student.BasicInfo.ContractTypes
+        ?.Select(x => contractTypes.FirstOrDefault(y => y.ContractTypeId == x)?.Name.GetValue())
+        .Where(x => x != null);
+    var studentAreaOfInterests = student.BasicInfo.ContractTypes
+        ?.Select(x => areaOfInterests.FirstOrDefault(y => y.AreaOfInterestId == x)?.Name.GetValue())
+        .Where(x => x != null);
+}
+
+<div class="box-bg box-bg--grey-light box-bg--medium">
+    <div class="grid">
+        <div class="grid__cell size--l--3-12 size--s--1-2 ">
+            <div class="image">
+                <article class="box-vcard box-vcard--simple box-vcard--round-photo">
+                    <div class="box-vcard__inner no-border">
+                        <p class="box-vcard__img">
+                            @if (student.Photo.Photo.HasValue)
+                            {
+                                var media = module.Services.MediaService.GetById(student.Photo.Photo.Value);
+                                var link = media.GetValue<string>(UmbracoConstants.Conventions.Media.File);
+                                <img src="@link" alt="" width="170" height="170">
+                            }
+                            else
+                            {
+                                <img src="redakce/api/StudentPhotoApi/GetPhoto?studentId=@student.StudentId" width="170" height="170">
+                            }   
+                        </p>
+                    </div>
+                </article>
+            </div>
+        </div>
+        <div class="grid__cell size--l--3-12 size--s--1-2 ">
+            <div class="box-content box-bg--small box-bg box-bg--grey-light u-mb-0">
+                <h4>Můj profil</h4>
+                <p class="small">
+                    <a href="@(memberZoneUrl + module.Settings.RouteStudentCV)">Upravit můj profil</a>
+                    <br /><br />
+                    Profil vyplněn na <strong>@student.Completeness() %</strong>
+                    <br /><br />
+                    Čím úplnější budete mít profil, tím více nabídek práce budete dostávat.
+                    <br /><br />
+                    <a href="redakce/api/StudentApi/DownloadDocxCv" data-anchor="#">Stáhnout si životopis&nbsp;<span class="icon-file-word icon icon-muniweb-file-word icon-muniweb mceNonEditable"></span></a>
+                </p>
+            </div>
+        </div>
+        <div class="grid__cell size--l--3-12 size--s--1-2 ">
+            <div class="box-content box-bg--small box-bg box-bg--grey-light u-mb-0">
+                <h4>Můj stav</h4>
+                <p class="small">
+                    <a href="@(memberZoneUrl + module.Settings.RouteStudentCVBasicInfo)">Upravit můj stav</a>
+                    <br /><br />
+                    Aktuálně <strong>přijímám nabídky</strong> od zaměstnavatelů registrovaných v portálu. Můj profil je pro ně <strong>@(student.Visibility.ProvideContact ? "přístulný" : "nepřístupný")</strong>.
+                    <br /><br />
+                    Nastoupit můžu
+                    @if (student.BasicInfo.PreferredJobBeginning.HasValue && student.BasicInfo.PreferredJobBeginning.Value <= DateTime.Now)
+                    {
+                        <strong>ihned</strong>@:.
+                    }
+                    else if (student.BasicInfo.PreferredJobBeginning.HasValue)
+                    {
+                        <strong>od @student.BasicInfo.PreferredJobBeginning.Value.ToShortDateString()</strong>@:.
+                    }
+                    else
+                    {
+                        <strong>(nevyplněno)</strong>@:.
+                    }
+                </p>
+            </div>
+
+        </div>
+        <div class="grid__cell size--l--3-12 size--s--1-2 ">
+            <div class="box-content box-bg--small box-bg box-bg--grey-light u-mb-0">
+                <h4>Moje kritéria</h4>
+                <p class="small">
+                    <a href="@(memberZoneUrl + module.Settings.RouteStudentCVBasicInfo)">Upravit moje kritéria</a>
+                    <br /><br />
+                    Hledám
+                    <strong> 
+                        @if (studentContractTypes?.Any() ?? false)
+                        {
+                            @:@string.Join(", ", studentContractTypes)
+                        }
+                        else
+                        {
+                            @:(nevyplněno)
+                        }
+                    </strong> 
+                    <br />
+                    Mám zájem o práci v oblastech:
+                    <strong>
+                        @if (studentAreaOfInterests?.Any() ?? false)
+                        {
+                            @:@string.Join(", ", studentAreaOfInterests)
+                        }
+                        else
+                        {
+                            @:(nevyplněno)
+                        }
+                    </strong>
+                    <br />
+                    Hledám práci v: 
+                    <strong>
+                        @if (student.BasicInfo.PreferedLocationId != null)
+                        {
+                            @student.BasicInfo.PreferedLocationId
+                        }
+                        else
+                        {
+                            @:(nevyplněno)
+                        }
+                    </strong>
+                </p>
+            </div>
+
+        </div>
+    </div>
+</div>

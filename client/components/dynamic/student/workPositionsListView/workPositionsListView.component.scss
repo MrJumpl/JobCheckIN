@@ -1,0 +1,30 @@
+img.logo {
+    height: 50px;
+}
+
+table.workPositions-list {
+    width: 100%;
+    text-align: center;
+    border-collapse: collapse;
+}
+table.workPositions-list td, table.workPositions-list th {
+    border: 1px solid #000000;
+    padding: 10px 15px;
+}
+table.workPositions-list tbody td {
+    font-size: 13px;
+    color: #333333;
+    
+    &.favorite {
+        width: 100px;
+    }
+    
+}
+
+table.workPositions-list thead th {
+    font-size: 15px;
+    font-weight: bold;
+    color: #000000;
+    border: 0;
+    padding-bottom: 10px;
+}

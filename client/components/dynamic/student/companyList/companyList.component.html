@@ -1,0 +1,58 @@
+<form
+    class="filter-form"
+    [formGroup]="filterForm"
+    (submit)="loadCompanies()"
+>
+    <h3>Vyhledejte pracovní pozice</h3>
+    <div class="grid grid--middle">
+        <div class="grid__cell size--l--4-12">
+            <muniweb-form-field id="areaOfInterests"
+                                label="Vyberte oblast zájmu"
+                                controlName="areaOfInterests">
+                <span class="inp-fix inp-fix--select">
+                    <ng-select formControlName="areaOfInterests"
+                        [multiple]="true"
+                        [closeOnSelect]="false"
+                        [items]="getAreaOfInterests()"
+                        placeholder="Všechny oblasti"
+                        bindLabel="name"
+                        bindValue="areaOfInterestId"
+                    ></ng-select>
+                </span>
+            </muniweb-form-field>
+        </div>
+        <div class="grid__cell size--l--4-12">
+            <muniweb-form-field id="name"
+                                label="Vyhledejte firmu"
+                                controlName="name">
+                <input placeholder="Zadejte název firmy" type="text" class="inp-text" formControlName="name">
+            </muniweb-form-field>
+        </div>
+        <div class="grid__cell size--l--4-12 button-alignment-right">
+            <p>
+                <a href="javascript:void(0)" (click)="onDetailedFilterClick()"><span class="icon icon-sliders-h"></span> Zadat více parametrů <span class="icon icon-angle-{{detailedFilter ? 'up' : 'down'}}"></span></a>
+            </p>
+        </div>
+    </div>
+
+    <div class="grid detailedFilter-content" [ngClass]="{ 'detailedFilter-content-open': detailedFilter }" #detailedFilterRef>
+        <div class="grid__cell size--l--4-12">
+        </div>
+    </div>
+
+    <p class="button-alignment-left">
+        <muniweb-button
+            size="small"
+            submit="true"
+            label="Filtrovat"
+        ></muniweb-button>
+    </p>
+</form>
+
+<muniweb-pagination [loading]="loading" [pagesCount]="1" *ngIf="!error">
+    <jobchin-student-companyListView [companies]="companies" [noLogo]="config.companyNoLogoLink"></jobchin-student-companyListView>
+</muniweb-pagination>
+
+<muniweb-notice noticeType="error" *ngIf="error">
+    <p>Nastala chyba při načítání zaměstnavatelů, opakujte svou akci později.</p>
+</muniweb-notice>

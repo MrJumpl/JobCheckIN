@@ -1,0 +1,20 @@
+<jobchin-student-header></jobchin-student-header>
+
+<div class="grid grid--xl">
+    <div class="grid__cell size--l--3-12 size--m--4-12">
+        <member-menu>
+            <side-menu-item
+                [routerLink]="jobchinRoutes.visibility"
+                title="Viditelnost profilu"
+            ></side-menu-item>
+            <side-menu-item
+                [routerLink]="jobchinRoutes.notification"
+                title="Nastavení notifikací"
+            ></side-menu-item>
+        </member-menu>
+    </div>
+
+    <div class="grid__cell size--l--9-12 size--m--8-12">
+        <router-outlet></router-outlet>
+    </div>
+</div>

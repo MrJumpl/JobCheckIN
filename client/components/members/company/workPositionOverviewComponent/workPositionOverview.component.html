@@ -1,0 +1,80 @@
+<div class="grid u-mb-30">
+    <div class="grid__cell size--l--8-12 size--m--8-12">
+        <h1 class="h2">{{ getName() }}</h1>
+        
+        <p>
+            <muniweb-button
+                label="Editovat"
+                [size]="MuniWebButtonSize.small"
+                (click)="redirectUpdate()"
+                *ngIf="canEdit()"
+            ></muniweb-button>
+            
+            <muniweb-button
+                class="u-pl-20"
+                label="Duplikovat"
+                [size]="MuniWebButtonSize.small"
+                (click)="redirectDuplicate()"
+            ></muniweb-button>
+    
+            <jobchin-workPosition-preview class="u-pl-20"></jobchin-workPosition-preview>
+        </p>
+    </div>
+    <div class="grid__cell size--l--4-12 size--m--4-12">
+        <p class="right">
+            <muniweb-button
+                label="Zpět na seznam"
+                [size]="MuniWebButtonSize.small"
+                (click)="redirectList()"
+            ></muniweb-button>
+        </p>
+    </div>
+</div>
+
+
+
+<muniweb-pagination [loading]="studentsLoading" [pagesCount]="students?.paginationInfo?.pagesCount" (changePage)="loadStudentsPage($event)">
+    <h2 class="h3">Zájemci o pracovní pozici</h2>
+    <label class="inp-item inp-item--checkbox" *ngIf="students?.paginationInfo?.resultsCount > 0">
+        <input type="checkbox" [checked]="all" (click)="selectAll()">
+        <span>
+            <a href="javascript:void(0)" (click)="selectAll()">Vybrat všechny</a>
+        </span>
+    </label>
+    <a href="javascript:void(0)" *ngIf="selectedAny()">Stáhnout CV</a>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Uchazeč</th>
+                    <th>Projevení zájmu</th>
+                    <th>Shoda</th>
+                </tr>
+            </thead>
+            <tbody>
+                <ng-container *ngIf="students?.paginationInfo?.resultsCount > 0">
+                    <tr *ngFor="let student of students.students; index as i">
+                        <td>
+                            <label class="inp-item inp-item--checkbox">
+                                <input type="checkbox" [formControl]="selected.controls[i]">
+                                <span class="student-checkbox">
+                                    <jobchin-student-photo
+                                        [studentId]="student.studentId"
+                                        [fullName]="student.fullName"
+                                        [photoLink]="student.photoLink"
+                                        [cardClickable]="true"
+                                        (onCardClick)="redirectStudentDetail()"
+                                    ></jobchin-student-photo>
+                                </span>
+                            </label>
+                        </td>
+                        <td class="middle">{{ student.shownInterest | date:'mediumDate' }}</td>
+                    </tr>
+                </ng-container>
+                <tr *ngIf="students?.paginationInfo?.resultsCount === 0">
+                    <td colspan="3">Nikdo neprojevil zájem</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</muniweb-pagination>

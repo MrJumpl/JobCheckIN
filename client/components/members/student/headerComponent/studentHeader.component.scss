@@ -1,0 +1,28 @@
+
+:host ::ng-deep .box-vcard__img {
+    .photo-change-button {
+        display: none;
+    }
+
+    &:hover .photo-change-button {
+        position: absolute;
+        height: 150px;
+        width: 150px;
+        top: 0;
+        background-color: #80808066;
+        border-radius: 50%;
+        text-align: center;
+        padding-top: auto;
+        justify-content: center;
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+    }
+}
+
+.photo-change-text {
+    border: 2px solid #0000dc;
+    background-color: #0000dc;
+    color: #fff;
+    padding: 5px;
+}

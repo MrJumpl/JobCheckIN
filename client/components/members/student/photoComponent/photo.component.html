@@ -1,0 +1,25 @@
+<article class="box-vcard box-vcard--simple box-vcard--round-photo u-mb-0">
+    <div class="box-vcard__inner no-border" *ngIf="!cardClickable">
+        <ng-container *ngTemplateOutlet="innerTpl"></ng-container>
+    </div>
+    <a href="javascript:void(0)" class="box-vcard__inner no-border" (click)="cardClick()" *ngIf="cardClickable">
+        <ng-container *ngTemplateOutlet="innerTpl"></ng-container>
+    </a>
+</article>
+
+<ng-template #innerTpl>
+    <p class="box-vcard__img">
+        <ng-container  *ngIf="photoLink; else defaultPhoto">
+            <img src="{{ photoLink }}" alt="" width="{{ size }}" height="{{ size }}">
+        </ng-container>
+        <ng-template #defaultPhoto>
+            <img src="redakce/api/StudentPhotoApi/GetPhoto?studentId={{ studentId }}" alt="" width="{{ size }}" height="{{ size }}">
+        </ng-template>
+        <a href="javascript:void(0)" class="photo-change-button" (click)="photoClick()" *ngIf="photoClickable">
+            <span class="photo-change-text">Změnit foto</span>
+        </a>
+    </p>
+    <div class="box-vcard__content">
+        <h1 class="box-vcard__name">{{ fullName }} </h1>
+    </div>
+</ng-template>

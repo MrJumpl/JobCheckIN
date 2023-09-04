@@ -1,0 +1,13 @@
+.detailedFilter-content {
+    overflow: hidden;
+    transition: max-height 0.7s;
+    max-height: 0;
+
+    &-open {
+        max-height: 100vh;
+    }
+
+    &-overflow {
+        overflow: visible;
+    }
+}

@@ -1,0 +1,70 @@
+<p class="u-mb-15">
+    <muniweb-pop-up-button
+        label="Mám zájem"
+        popupTitle="Mám zájem"
+        wrapWide="true"
+    >
+        <ng-container *ngIf="!getHasShownInterest(); else success">
+            <p [innerHTML]="getInterestText()"></p>
+    
+            <muniweb-form #form
+                [config]="formConfig"
+                [formGroup]="form.form"
+                [submitAttempt]="form.formSubmitAttempt">
+    
+                <ng-container body>
+                    <muniweb-form-field *ngIf="hasCoverLetter()"
+                        label="Motivační dopis"
+                    > 
+                        <textarea formControlName="coverLetter"
+                            class="inp-text"
+                            maxLength="100"
+                        ></textarea>
+                    </muniweb-form-field>
+                    <muniweb-form-field *ngIf="getAdditionalQuestions()"
+                        [label]="getAdditionalQuestions()"
+                    > 
+                        <textarea formControlName="additionalQuestion"
+                            class="inp-text"
+                            maxLength="100"
+                        ></textarea>
+                    </muniweb-form-field>
+                </ng-container>
+
+                <ng-container footer>
+                    <p class="right">
+                        <muniweb-button
+                            class="u-pr-20"
+                            inverse="true"
+                            label="Profil"
+                            [size]="MuniWebButtonSize.small"
+                            (click)="redirectProfile()"
+                        ></muniweb-button>
+    
+                        <muniweb-button
+                            submit="true"
+                            label="Odeslat"
+                            [size]="MuniWebButtonSize.small"
+                        ></muniweb-button>
+                    </p>
+                </ng-container>
+            </muniweb-form>
+        </ng-container>
+
+        <ng-template #success>
+            <muniweb-notice noticeType="success">
+                <p>done</p>
+            </muniweb-notice>
+        </ng-template>
+    </muniweb-pop-up-button>
+<p>
+    <muniweb-button
+        inverse="true"
+        border="true"
+        wrapWide="true"
+        icon="icon-heart"
+        [label]="' ' + getFavoriteLabel()"
+        [state]="favoriteState"
+        (click)="onFavoriteClick()"
+    ></muniweb-button>
+</p>

@@ -1,0 +1,9 @@
+.inp-item>span.student-checkbox {
+    &:before, &:after {
+        margin-top: 14px;
+    } 
+}
+
+th:first-child {
+    padding-left: 29px;
+}

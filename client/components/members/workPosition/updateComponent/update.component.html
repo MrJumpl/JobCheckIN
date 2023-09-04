@@ -1,0 +1,47 @@
+<div class="grid">
+    <div class="grid__cell size--l--8-12 size--m--8-12">
+        <h1 class="h2">{{getName()}}</h1>
+        <p *ngIf="opened">
+            <jobchin-workPosition-preview [getModelFunc]="getModel"
+            ></jobchin-workPosition-preview>
+        </p>
+    </div>
+    <div class="grid__cell size--l--4-12 size--m--4-12">
+        <p class="right">
+            <muniweb-button
+                label="Zpět na přehled"
+                [size]="MuniWebButtonSize.small"
+                (click)="redirectOverview()"
+            ></muniweb-button>
+        </p>
+    </div>
+</div>
+
+<div class="grid grid--xl grid--center">
+    <div class="grid__cell size--l--3-12 size--m--4-12" *ngIf="canEdit()">
+        <muniweb-side-menu>
+            <side-menu-item
+                [routerLink]="jobchinRoutes.basicInfo"
+                title="Základní informace"
+            ></side-menu-item>
+            <side-menu-item
+                [routerLink]="jobchinRoutes.detail"
+                title="Detail pracovní pozice"
+            ></side-menu-item>
+            <side-menu-item
+                [routerLink]="jobchinRoutes.candidates"
+                title="Uchazeči"
+            ></side-menu-item>
+            <side-menu-item
+                [routerLink]="jobchinRoutes.candidateRequest"
+                title="Doplňující otázka"
+            ></side-menu-item>
+        </muniweb-side-menu>
+    </div>
+
+    <div class="grid__cell size--l--9-12 size--m--8-12">
+        <muniweb-fieldset>
+            <router-outlet (activate)="onActivate($event)"></router-outlet>
+        </muniweb-fieldset>
+    </div>
+</div>

@@ -1,0 +1,87 @@
+<muniweb-fieldset>
+    <h3>Pobočky</h3>
+
+    <muniweb-form #form
+                  [config]="formConfig"
+                  [formGroup]="form.form"
+                  [submitAttempt]="form.formSubmitAttempt"
+    >
+        <ng-container body>
+            <muniweb-form-field
+                id="branches"
+                controlName="branches"
+            >
+                <jobchin-accordionList
+                    addButtonLabel="Přidat pobočku"
+                    removeButtonLabel="Odebrat pobočku"
+                    [itemForm]="branch"
+                    [formArray]="branches"
+                    [getTitle]="getTitle"
+                    [isNew]="isNew"
+                    (add)="addBranch()"
+                    (remove)="removeBranch($event)"
+                ></jobchin-accordionList>
+            </muniweb-form-field>
+        </ng-container>
+    
+        <jobchin-formFooter footer
+            [formConfig]="formConfig">
+        </jobchin-formFooter>
+    </muniweb-form>
+</muniweb-fieldset>
+
+
+<ng-template #branch let-i let-item="item" [formGroup]="form.form" [submitAttempt]="form.formSubmitAttempt">
+    <ng-container formArrayName="branches">
+        <div [formGroupName]="i">
+            <muniweb-form-field id="street"
+                                label="Ulice a č. p."
+                                required="true"
+                                controlName="street">
+                <input formControlName="street"
+                    class="inp-text"
+                    [maxLength]="jobchinSettings.streetMaxLength">
+            </muniweb-form-field>
+            
+            <div class="grid">
+                <div class="grid__cell size--l--6-12">
+                    <muniweb-form-field id="city"
+                                        label="Město"
+                                        required="true"
+                                        controlName="city">
+                        <input formControlName="city"
+                            class="inp-text"
+                            [maxLength]="jobchinSettings.cityMaxLength">
+                    </muniweb-form-field>
+                </div>
+        
+                <div class="grid__cell size--l--6-12">
+                    <muniweb-form-field id="zipCode"
+                                        label="PSČ"
+                                        required="true"
+                                        controlName="zipCode">
+                        <input formControlName="zipCode"
+                            class="inp-text"
+                            [maxLength]="jobchinSettings.zipCodeMaxLength">
+                    </muniweb-form-field>
+                </div>
+            </div>
+
+            <muniweb-form-field id="locationId"
+                                label="Umístění pobočky"
+                                required="true"
+                                controlName="locationId">
+                <span class="inp-fix inp-fix--select">
+                    <ng-select formControlName="locationId"
+                        [multiple]="false"
+                        [closeOnSelect]="true"
+                        [items]="getLocalAdministrativeUnits()"
+                        bindLabel="displayValue"
+                        bindValue="value"
+                    ></ng-select>
+                </span>
+            </muniweb-form-field>
+            
+        </div>
+    </ng-container>
+</ng-template>

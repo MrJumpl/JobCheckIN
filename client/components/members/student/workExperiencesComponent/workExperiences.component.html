@@ -1,0 +1,258 @@
+<muniweb-fieldset>    
+    <muniweb-form #form
+                  [config]="formConfig"
+                  [formGroup]="form.form"
+                  [submitAttempt]="form.formSubmitAttempt"
+    >
+        <ng-container body>
+            <h3>Pracovní zkušenosti</h3>
+            <muniweb-form-field
+                id="hasWorkExperinces"
+                controlName="hasWorkExperinces"
+            >
+                <div class="form-inline form-inline--spaced">
+                    <p>
+                        <select
+                            formControlName="hasWorkExperinces"
+                            class="inp-select"
+                        >
+                            <option value="true">Mám</option>
+                            <option value="false">Nemám</option>
+                        </select>
+                    </p>
+                    <p>
+                        za sebou už nějaké pracovní zkušenosti.
+                    </p>
+
+                </div>
+            </muniweb-form-field>
+
+            <muniweb-form-field *ngIf="show"
+                id="companyName"
+                controlName="workExperiences"
+            >
+                <jobchin-accordionList
+                    addButtonLabel="Přidat další pracovní zkušneost"
+                    removeButtonLabel="Odebrat pracovní zkušenost"
+                    [itemForm]="wp"
+                    [formArray]="workExperiences"
+                    [getTitle]="getWorkExperienceTitle"
+                    [isNew]="isAccordionOpen"
+                    (add)="addWorkExperience()"
+                    (remove)="removeWorkExperience($event)"
+                ></jobchin-accordionList>
+                
+                <error-message
+                    errorMsg="Pokud máte pracovní zkušenosti, uveďte je"
+                ></error-message>
+            </muniweb-form-field>
+            
+            <hr />
+
+            <h3>Kariérní portfolio</h3>
+            <muniweb-form-field
+                id="careerPortfolio"
+                [description]="formDescriptions.careerPortfolio"
+                controlName="careerPortfolio"
+            >
+                <muniweb-rte 
+                    formControlName="careerPortfolio"
+                    [maxLength]="jobchinSettings.rteLettersMaxLength"
+                    [tinyConfig]="tinyConfig"
+                ></muniweb-rte>
+            </muniweb-form-field>
+        </ng-container>
+    
+        <jobchin-formFooter footer
+            [formConfig]="formConfig">
+        </jobchin-formFooter>
+    </muniweb-form>
+</muniweb-fieldset>
+
+<ng-template #wp let-i let-item="item" [formGroup]="form.form" [submitAttempt]="form.formSubmitAttempt">
+    <ng-container formArrayName="workExperiences">
+        <div [formGroupName]="i">                            
+            <div class="grid">
+                <div class="grid__cell size--l--6-12">
+                    <muniweb-form-field
+                        id="position"
+                        label="Pozice"
+                        controlName="position"
+                    >
+                        <input
+                            formControlName="position"
+                            class="inp-text"
+                            [maxLength]="jobchinSettings.workExperienceMaxLength"
+                        >
+                    </muniweb-form-field>
+                </div>
+                <div class="grid__cell size--l--6-12">
+                    <muniweb-form-field
+                        id="companyName"
+                        label="Název společnosti"
+                        controlName="companyName"
+                    >
+                        <input
+                            formControlName="companyName"
+                            class="inp-text"
+                            [maxLength]="jobchinSettings.workExperienceMaxLength"
+                        >
+                    </muniweb-form-field>
+                </div>
+            </div>
+            <div class="grid">
+                <div class="grid__cell size--l--6-12">
+                    <muniweb-form-field
+                        id="city"
+                        label="Místo"
+                        controlName="city"
+                    >
+                        <input
+                            formControlName="city"
+                            class="inp-text"
+                            [maxLength]="jobchinSettings.studentCityMaxLength"
+                        >
+                    </muniweb-form-field>
+                </div>
+                <div class="grid__cell size--l--6-12">
+                    <muniweb-form-field id="areaOfInterest"
+                        label="Práce byla v oblasti"
+                        controlName="areaOfInterest"
+                    >
+                        <span class="inp-fix inp-fix--select">
+                            <ng-select formControlName="areaOfInterest"
+                                [multiple]="false"
+                                [closeOnSelect]="true"
+                                [items]="getAreaOfInterests()"
+                                bindLabel="name"
+                                bindValue="areaOfInterestId"
+                            ></ng-select>
+                        </span>
+                    </muniweb-form-field>
+                </div>
+            </div>
+            <div class="grid grid--middle grid--right">
+                <div class="grid__cell size--l--6-12">
+                    <muniweb-form-field
+                        id="from"
+                        label="Pracoval/a jsem tam od"
+                        controlName="from"
+                    >
+                        <muniweb-datetime
+                            formControlName="from"
+                            noBottomMargin="true"
+                        ></muniweb-datetime>
+                    </muniweb-form-field>
+                </div>
+                <div class="grid__cell size--l--6-12 size--m--2-4" *ngIf="showTo(item)">
+                    <muniweb-form-field
+                        id="to"
+                        label="Do"
+                        controlName="to"
+                    >
+                        <muniweb-datetime
+                            formControlName="to"
+                            noBottomMargin="true"
+                        ></muniweb-datetime>
+                    </muniweb-form-field>
+                </div>
+                <div class="grid__cell size--l--6-12 size--m--2-4 u-mb-30">
+                    <label class="inp-item inp-item--checkbox">
+                        <input type="checkbox"
+                                formControlName="stillWorking">
+                        <span>
+                            Stále pracuji
+                        </span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="grid grid--middle">
+                <div class="grid__cell size--l--6-12">
+                    <muniweb-form-field id="contractType"
+                        label="Typ pracovního úvazku"
+                        controlName="contractType"
+                    >
+                        <span class="inp-fix inp-fix--select">
+                            <ng-select formControlName="contractType"
+                                [multiple]="false"
+                                [closeOnSelect]="true"
+                                [items]="getContractTypes()"
+                                bindLabel="name"
+                                bindValue="contractTypeId"
+                            ></ng-select>
+                        </span>
+                    </muniweb-form-field>
+                </div>
+                <div class="grid__cell size--l--6-12 u-mb-30">
+                    <label class="inp-item inp-item--checkbox">
+                        <input
+                            type="checkbox"
+                            formControlName="paid"
+                        >
+                        <span>
+                            Byla placená
+                        </span>
+                    </label>
+                </div>
+            </div>
+
+            <muniweb-form-field
+                label="Popište, čemu jste se v práci věnovali"
+                controlName="description"
+            >
+                <muniweb-rte 
+                    formControlName="description"
+                    [maxLength]="jobchinSettings.shortRteLettersMaxLength"
+                    [tinyConfig]="tinyConfig"
+                ></muniweb-rte>
+            </muniweb-form-field>
+
+            <div class="form-inline form-inline--spaced" [ngClass]="{'u-mb-30' : !showContact(item)}">
+                <p>
+                    <select
+                        formControlName="hasContact"
+                        class="inp-select"
+                    >
+                        <option value="true">Chci</option>
+                        <option value="false">Nechci</option>
+                    </select>
+                </p>
+                <p>
+                    připojit kontakt, na němž si můžete moji pracovní zkušenost ověřit.
+                </p>
+            </div>
+
+            <div class="grid" *ngIf="showContact(item)">
+                <div class="grid__cell size--l--6-12">
+                    <muniweb-form-field
+                        label="Kontaktní osoba"
+                        controlName="contactPerson"
+                        horizontal="true"
+                    >
+                        <input
+                            formControlName="contactPerson"
+                            class="inp-text"
+                            placeholder="Kontaktní osoba"
+                            [maxLength]="jobchinSettings.workExperienceMaxLength"
+                        >
+                    </muniweb-form-field>
+                </div>
+                <div class="grid__cell size--l--6-12">
+                    <muniweb-form-field
+                        label="Telefon nebo e-mail"
+                        controlName="contact"
+                        horizontal="true"
+                    >
+                        <input
+                            formControlName="contact"
+                            class="inp-text"
+                            placeholder="Telefon nebo e-mail"
+                            [maxLength]="jobchinSettings.workExperienceMaxLength"
+                        >
+                    </muniweb-form-field>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</ng-template>

@@ -1,0 +1,53 @@
+<muniweb-fieldset>
+    <h3>Kontaktní informace</h3>
+    
+    <muniweb-form #form
+                  [config]="formConfig"
+                  [formGroup]="form.form"
+                  [submitAttempt]="form.formSubmitAttempt"
+    >
+        <ng-container body>
+            <muniweb-form-field id="privateEmail"
+                                label="E-mail"
+                                controlName="privateEmail">
+                <input class="inp-text"
+                       formControlName="privateEmail"
+                       [maxLength]="jobchinSettings.notificationEmailMaxLength">
+            </muniweb-form-field>
+            
+            <muniweb-form-field id="phone"
+                                label="Telefon"
+                                controlName="phone">
+                <input class="inp-text"
+                       formControlName="phone"
+                       [maxLength]="jobchinSettings.contactMaxLength">
+            </muniweb-form-field>
+            
+            <muniweb-form-field id="facebook"
+                                label="Facebook"
+                                controlName="facebook">
+                <input type="text" class="inp-text socialMedia-facebook" formControlName="facebook" [maxLength]="jobchinSettings.socialMediaMaxLength">
+                <span class="socialMediaPlaceholder">www.facebook.com/</span>
+            </muniweb-form-field>
+
+            <muniweb-form-field id="twitter"
+                                label="Twitter"
+                                controlName="twitter">
+                <input type="text" class="inp-text socialMedia-twitter" formControlName="twitter" [maxLength]="jobchinSettings.socialMediaMaxLength">
+                <span class="socialMediaPlaceholder">www.twitter.com/</span>
+            </muniweb-form-field>
+            
+            <muniweb-form-field id="linkedin"
+                                label="LinkedIn"
+                                controlName="linkedin">
+        
+                <input type="text" class="inp-text socialMedia-linkedin" formControlName="linkedin" [maxLength]="jobchinSettings.socialMediaMaxLength">
+                <span class="socialMediaPlaceholder">www.linkedin.com/in/</span>
+            </muniweb-form-field>
+        </ng-container>
+    
+        <jobchin-formFooter footer
+            [formConfig]="formConfig">
+        </jobchin-formFooter>
+    </muniweb-form>
+</muniweb-fieldset>

@@ -1,0 +1,12 @@
+.button-alignment-right, .button-alignment-left {
+    text-align: center;
+}
+
+@media (min-width: 480px) {
+    .button-alignment-right {
+        text-align: right;
+    }
+    .button-alignment-left {
+        text-align: left;
+    }
+}

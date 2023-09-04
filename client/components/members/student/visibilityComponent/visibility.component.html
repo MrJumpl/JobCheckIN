@@ -1,0 +1,32 @@
+<muniweb-fieldset>
+    <p class="u-mb-0" [innerHtml]="getVisibilityDescription()"></p>
+
+    <h3 class="u-mt-0">Viditelnost profilu</h3>
+
+    <muniweb-form
+        #form
+        [config]="formConfig"
+        [formGroup]="form.form"
+        [submitAttempt]="form.formSubmitAttempt"
+    >
+        <ng-container body>
+            <p>
+                <label class="inp-item inp-item--checkbox">
+                    <input
+                        type="checkbox"
+                        formControlName="provideContact"
+                    >
+                    <span>
+                        Chci být zařazen/a do databáze studentů přístupné zaměstnavatelům registrovaným v systému JobCheckIN, kteří mě mohou kontaktovat s nabídkami pracovních příležitostí.
+                    </span>
+                </label>
+            </p>
+        </ng-container>
+
+        <jobchin-formFooter
+            footer
+            [formConfig]="formConfig"
+        >
+        </jobchin-formFooter>
+    </muniweb-form>
+</muniweb-fieldset>

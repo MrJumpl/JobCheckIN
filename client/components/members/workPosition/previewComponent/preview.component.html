@@ -1,0 +1,16 @@
+<muniweb-button
+    label="Náhled pracovní pozice"
+    [size]="MuniWebButtonSize.small"
+    [state]="previewState"
+    (click)="getPreview()"
+></muniweb-button>
+        
+<muniweb-pop-up title="Náhled pracovní pozice">
+    <ng-container *ngIf="preview">
+        <div class="test" [innerHtml]="preview"></div>
+    </ng-container>
+    <ng-container *ngIf="previewError">
+        <muniweb-notice noticeType="error" [message]="previewError">
+        </muniweb-notice>
+    </ng-container>
+</muniweb-pop-up>

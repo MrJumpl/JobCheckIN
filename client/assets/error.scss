@@ -1,0 +1,19 @@
+:host ::ng-deep .error .ng-select-container {
+    border: 1px solid red;
+}
+
+:host ::ng-deep .error .box-accordion__item.accordion-item-error {
+    border: 1px solid red;
+
+    + .accordion-item-error {
+        border-top: 0px;
+    }
+
+    span.icon {
+        border-color: red;
+    }
+}
+
+:host ::ng-deep .error .mce-container {
+    border-color: red;
+}

@@ -1,0 +1,170 @@
+<muniweb-fieldset>
+    <h3>Základní informace</h3>
+
+    <muniweb-form
+        #form
+        [config]="formConfig"
+        [formGroup]="form.form"
+        [submitAttempt]="form.formSubmitAttempt"
+    >
+        <ng-container body>
+            <muniweb-form-field
+                label="Kariérní vize"
+                [description]="formDescriptions.careerVision"
+                controlName="careerVision"
+            >
+                <muniweb-rte 
+                    formControlName="careerVision"
+                    [maxLength]="jobchinSettings.rteLettersMaxLength"
+                    [tinyConfig]="tinyConfig"
+                ></muniweb-rte>
+            </muniweb-form-field>
+
+            <muniweb-form-field
+                label="Kdo jsem"
+                [description]="formDescriptions.presentation"
+                controlName="presentation"
+            >
+                <muniweb-rte 
+                    formControlName="presentation"
+                    [maxLength]="jobchinSettings.rteLettersMaxLength"
+                    [tinyConfig]="tinyConfig"
+                ></muniweb-rte>
+            </muniweb-form-field>
+
+            <div class="grid ">
+                <div class="grid__cell size--l--6-12">
+                    <muniweb-form-field id="areaOfInterests"
+                        label="Primární oblasti zájmu"
+                        errorMessage="Můžete si vybrat nejvýše 3"
+                        controlName="areaOfInterests"
+                    >
+                        <span class="inp-fix inp-fix--select">
+                            <ng-select formControlName="areaOfInterests"
+                                [multiple]="true"
+                                [closeOnSelect]="false"
+                                [items]="getAreaOfInterests()"
+                                bindLabel="name"
+                                bindValue="areaOfInterestId"
+                            ></ng-select>
+                        </span>
+                    </muniweb-form-field>
+                </div>
+                <div class="grid__cell size--l--6-12">
+                    <muniweb-form-field id="secondaryAreaOfInterests"
+                        label="Sekundární oblasti zájmu"
+                        controlName="secondaryAreaOfInterests"
+                    >
+                        <span class="inp-fix inp-fix--select">
+                            <ng-select formControlName="secondaryAreaOfInterests"
+                                [multiple]="true"
+                                [closeOnSelect]="false"
+                                [items]="secondaryAreaOfInterest"
+                                bindLabel="name"
+                                bindValue="areaOfInterestId"
+                            ></ng-select>
+                        </span>
+                    </muniweb-form-field>
+                </div>
+            </div>
+
+            <jobchin-contractType-picker controlName="contractTypes"></jobchin-contractType-picker>
+
+            <muniweb-form-field
+                label="Hledám práci v:"
+            >
+                <div class="grid grid--middle">
+                    <div class="grid__cell size--l--6-12" *ngIf="!hidePreferedLocationId">
+                        <span class="inp-fix inp-fix--select">
+                            <ng-select formControlName="preferedLocationId"
+                                [multiple]="false"
+                                [closeOnSelect]="true"
+                                [items]="getLocalAdministrativeUnits()"
+                                bindLabel="displayValue"
+                                bindValue="value"
+                            ></ng-select>
+                        </span>
+                    </div>
+                    <div class="grid__cell size--l--6-12">
+                        <label class="inp-item inp-item--checkbox">
+                            <input
+                                type="checkbox"
+                                formControlName="willingToMove"
+                            >
+                            <span>
+                                Jsem flexibilní
+                            </span>
+                        </label>
+                    </div>
+                </div>
+            </muniweb-form-field>
+
+            <muniweb-form-field
+                label="Mohu začít pracovat od"
+                noBottomMargin="true"
+            >
+                <div class="grid grid--middle">
+                    <div class="grid__cell size--l--6-12" *ngIf="!hideWorkFrom">
+                        <muniweb-datetime
+                            formControlName="preferredJobBeginning"
+                            [minDate]="getMinDate()"
+                            noBottomMargin="true"
+                        ></muniweb-datetime>
+                    </div>
+                    <div class="grid__cell size--l--6-12">
+                        <p>
+                            <label class="inp-item inp-item--checkbox">
+                                <input
+                                    type="checkbox"
+                                    formControlName="workFromNow"
+                                >
+                                <span>
+                                    Ihned
+                                </span>
+                            </label>
+                        </p>
+                    </div>
+                </div>
+            </muniweb-form-field>
+
+            <div class="grid">
+                <div class="grid__cell size--l--6-12">
+                    <muniweb-form-field
+                        label="Řidičský průkaz skupiny B (osobní auto)"
+                    >
+                        <label class="inp-item inp-item--checkbox">
+                            <input
+                                type="checkbox"
+                                formControlName="drivingLicense"
+                            >
+                            <span>
+                                Mám
+                            </span>
+                        </label>
+                    </muniweb-form-field>
+                </div>
+                <div class="grid__cell size--l--6-12">
+                    <muniweb-form-field
+                        label="Jsem aktivní řidič"
+                    >
+                        <label class="inp-item inp-item--checkbox">
+                            <input
+                                type="checkbox"
+                                formControlName="activeDriver"
+                            >
+                            <span>
+                                Nemám problém sednout do auta a komkoliv dojet.
+                            </span>
+                        </label>
+                    </muniweb-form-field>
+                </div>
+            </div>
+        </ng-container>
+
+        <jobchin-formFooter
+            footer
+            [formConfig]="formConfig"
+        >
+        </jobchin-formFooter>
+    </muniweb-form>
+</muniweb-fieldset>

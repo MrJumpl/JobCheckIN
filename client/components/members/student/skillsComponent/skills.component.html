@@ -1,0 +1,110 @@
+<muniweb-fieldset>
+    <muniweb-form #form
+                  [config]="formConfig"
+                  [formGroup]="form.form"
+                  [submitAttempt]="form.formSubmitAttempt"
+    >
+        <ng-container body>
+            <p class="u-mb-0" [innerHtml]="formDescriptions.skills" *ngIf="formDescriptions.skills"></p>
+
+            <h3 [ngClass]="{ 'u-mt-0' : formDescriptions.skills }">Tvrdé dovednosti</h3>
+
+            <muniweb-form-field id="hardSkills"
+                controlName="hardSkills"
+            >
+                <jobchin-hardSkillPicker 
+                    formControlName="hardSkills"
+                ></jobchin-hardSkillPicker>
+            </muniweb-form-field>
+            
+            <muniweb-form-field id="educationCertificate"
+                label="Certifikát"
+                controlName="educationCertificate"
+            >
+                
+                <div class="size--l--10-12">
+                    <muniweb-temp-file-upload
+                        formControlName="educationCertificate"
+                        [accept]="jobchinSettings.allowedFileTypes"
+                        [maxFiles]="1"
+                        [maxFileSizeB]="10485760"
+                    ></muniweb-temp-file-upload>
+                </div>
+            </muniweb-form-field>
+
+            <hr />
+            <h3>Měkké dovednosti</h3>
+                <ng-container formArrayName="softSkills">
+                    <ng-container *ngFor="let softSkill of softSkills.controls; index as i">
+                        <div [formGroupName]="i">
+                            <label class="inp-item inp-item--checkbox">
+                                <input type="checkbox"
+                                        formControlName="selected">
+                                <span>
+                                    {{getSoftSkillName(i)}}
+                                </span>
+                            </label>
+
+                            
+                            <muniweb-form-field *ngIf="showDescription(i)"
+                                id="description"
+                                description="Vysvětlete, proč si to o sobě myslíte"
+                                required="true"
+                                controlName="description"
+                            >
+                                <textarea formControlName="description"
+                                    class="inp-text"
+                                    [maxLength]="jobchinSettings.shortRteMaxLength"
+                                ></textarea>
+                            </muniweb-form-field>
+                        </div>
+                    </ng-container>
+                </ng-container>
+                
+            <muniweb-form-field id="primarySoftSkills"
+                label="Hlavní měkké dovednosti"
+                description="Vyberte si až 3 měkké dovednosti, kterými se chcete prezentovat zaměstnavatelům."
+                controlName="primarySoftSkills"
+            >
+                <ng-select formControlName="primarySoftSkills"
+                    [multiple]="true"
+                    [closeOnSelect]="false"
+                    [items]="getPossiblePrimaySoftSkills()"
+                    [maxSelectedItems]="maxPrimarySoftSkills"
+                    [searchable]="false"
+                    notFoundText="Není vyplněná žádná měkká dovednost."
+                    bindLabel="name"
+                    bindValue="softSkillId"
+                ></ng-select>
+            </muniweb-form-field>
+            
+            <hr />
+            <h3>Jazykové dovednosti</h3>
+            <muniweb-form-field
+                id="languages"
+                controlName="languages"
+            >
+                <jobchin-languagePicker formControlName="languages"></jobchin-languagePicker>
+            </muniweb-form-field>
+
+            <muniweb-form-field id="languageCertificate"
+                label="Certifikát"
+                controlName="languageCertificate"
+            >
+                
+                <div class="size--l--10-12">
+                    <muniweb-temp-file-upload
+                        formControlName="languageCertificate"
+                        [accept]="jobchinSettings.allowedFileTypes"
+                        [maxFiles]="1"
+                        [maxFileSizeB]="10485760"
+                    ></muniweb-temp-file-upload>
+                </div>
+            </muniweb-form-field>
+        </ng-container>
+
+        <jobchin-formFooter footer
+            [formConfig]="formConfig">
+        </jobchin-formFooter>
+    </muniweb-form>
+</muniweb-fieldset>

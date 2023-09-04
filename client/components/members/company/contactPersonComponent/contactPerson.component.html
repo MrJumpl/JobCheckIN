@@ -1,0 +1,48 @@
+<muniweb-fieldset>
+    <h3>Kontaktní osoba</h3>
+    
+    <muniweb-form #form
+                  [config]="formConfig"
+                  [formGroup]="form.form"
+                  [submitAttempt]="form.formSubmitAttempt"
+    >
+        <ng-container body>
+            <div class="grid">
+                <div class="grid__cell size--l--6-12">
+                    <muniweb-form-field id="firstname"
+                                        label="Jméno"
+                                        required="true"
+                                        controlName="firstname">
+                        <input formControlName="firstname"
+                               class="inp-text"
+                               [maxLength]="jobchinSettings.contactMaxLength">
+                    </muniweb-form-field>
+                </div>
+        
+                <div class="grid__cell size--l--6-12">
+                    <muniweb-form-field id="surname"
+                                        label="Příjmení"
+                                        required="true"
+                                        controlName="surname">
+                        <input formControlName="surname"
+                               class="inp-text"
+                               [maxLength]="jobchinSettings.contactMaxLength">
+                    </muniweb-form-field>
+                </div>
+            </div>
+            
+            <muniweb-form-field id="phone"
+                                label="Telefon"
+                                required="true"
+                                controlName="phone">
+                <input formControlName="phone"
+                       class="inp-text"
+                       [maxLength]="jobchinSettings.contactMaxLength">
+            </muniweb-form-field>
+        </ng-container>
+    
+        <jobchin-formFooter footer
+            [formConfig]="formConfig">
+        </jobchin-formFooter>
+    </muniweb-form>
+</muniweb-fieldset>

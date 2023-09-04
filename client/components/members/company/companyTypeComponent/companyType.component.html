@@ -1,0 +1,141 @@
+<muniweb-fieldset>
+    <muniweb-notice *ngIf="ocReturn"
+        noticeType="success"
+    >
+        <p>
+            Vaše objednávka byla zaplacena.
+        </p>
+    </muniweb-notice>
+
+    <p [innerHtml]="config?.afterLogin"></p>
+
+
+    <h3>Tarify</h3>
+    <p *ngIf="!hasCompanyTypes()">Nemáte zádné zakoupené tarify</p>
+    <ng-container *ngIf="hasCompanyTypes()">
+        <table class="table-padded">
+            <thead>
+                <tr>
+                    <td>Aktivní od – do</td>
+                    <td>Počet inzerátů</td>
+                    <td>Počet odkrytí</td>
+                    <td>Aktivní</td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+                <ng-container *ngFor="let companyType of config?.currentCompanyTypes">
+                    <tr (click)="openOrderDetail(companyType, order)" [ngClass]="{ 'company-type-overview' : companyType.orderState, 'company-type-overview-open': !order.hidden }">
+                        <td><span class="nowrap">{{companyType.activeFrom | date: 'mediumDate'}}</span> – <span class="nowrap">{{companyType.activeTo | date: 'mediumDate'}}</span></td>
+
+                        <td *ngIf="!companyType.numberOfWorkPosition">neomezený</td>
+                        <td *ngIf="companyType.numberOfWorkPosition">{{companyType.numberOfWorkPosition}}</td>
+
+                        <td *ngIf="!companyType.numberOfStudentsRevealed">neomezený</td>
+                        <td *ngIf="companyType.numberOfStudentsRevealed">{{companyType.numberOfStudentsRevealed}}</td>
+
+                        <td class="center">
+                            <span class="icon icon-check green" *ngIf="companyType.confirmed"></span>
+                            <span class="icon icon-times red" *ngIf="!companyType.confirmed"></span>
+                        </td>
+                        <td>
+                            <ng-container *ngIf="companyType.orderState">
+                                <span class="icon icon-angle-down" *ngIf="order.hidden"></span>
+                                <span class="icon icon-angle-up" *ngIf="!order.hidden"></span>
+                            </ng-container>
+                        </td>
+                    </tr>
+                    
+                    <tr #order hidden="true">
+                        <td colspan="5" class="order-detail" *ngIf="companyType.orderState">
+                            <muniweb-oc-order-state [config]="companyType.orderState" [download]="downloadInvoice(companyType.orderState.orderRequestId)"></muniweb-oc-order-state>
+                        </td>
+                    </tr>
+                    <ng-container *ngIf="companyType.orderState">
+                    </ng-container>
+                </ng-container>
+            </tbody>
+        </table>
+    </ng-container>
+    
+    <ng-container *ngIf="!successBuy">
+        <h3>Zakoupit nový tarif</h3>
+
+        <muniweb-form #form
+            [config]="formConfig"
+            [formGroup]="form.form"
+            [submitAttempt]="form.formSubmitAttempt"
+        >
+            <ng-container body>
+                <muniweb-form-field id="activeFrom"
+                    label="Platnost od"
+                    required="true"
+                    controlName="activeFrom"
+                >
+                    <muniweb-datetime
+                        formControlName="activeFrom"
+                        [minDate]="getMinDate()"
+                    ></muniweb-datetime>
+                </muniweb-form-field>
+                
+                <!-- <div class="box-workplaces">
+                    <div class="box-workplaces__wrap" *ngFor="let companyType of getCompanyTypes()">
+                        <h2 class="h4 box-workplaces__title">{{companyType.name}}</h2>
+                        <p>Prezentační profil společnosti</p>
+                    </div>
+                </div> -->
+
+                <muniweb-form-field id="companyTypeId"
+                    required="true"
+                    controlName="companyTypeId"
+                    errorMessage="Je nutné si vybrat tarif"
+                >
+                    <div class="grid grid--center">
+                        <div class="grid__cell size--l--4-12 size--m--2-4" *ngFor="let companyType of getCompanyTypes()">
+                            <div class="box-bg box-bg--small box-bg--white-border u-mb-30" [ngClass]="{ 'box-bg--white-border' : !isSelected(companyType.companyTypeId), 'box-bg--color-light box-bg--primary' : isSelected(companyType.companyTypeId) }"  (click)="select(companyType.companyTypeId)">
+                                <p class="center bold big u-mb-0">{{companyType.name}}</p>
+                                <hr class="title-separator" />
+                                <ul class="icon-ul">
+                                    <li *ngIf="companyType.companyPresentation"><i class="green icon-li icon icon-check"></i>Prezentační profil společnosti</li>
+                                    <li *ngIf="companyType.databaseSearch"><i class="green icon-li icon icon-check"></i>Vyhledávání v databázi</li>
+                                    <li><i class="green icon-li icon icon-check"></i>
+                                        <span>Počet současných inzerátů: </span>
+                                        <span class="bold" *ngIf="companyType.numberOfWorkPosition == null">neomezený</span>
+                                        <span class="bold" *ngIf="companyType.numberOfWorkPosition != null">{{companyType.numberOfWorkPosition}}</span>
+                                    </li>
+                                    <li><i class="green icon-li icon icon-check" [ngClass]="{ 'red icon-minus' : companyType.numberOfStudentsRevealed === 0, 'green icon-check' : companyType.numberOfStudentsRevealed !== 0 }"></i>
+                                        <span>Počet odkrytí studentů: </span>
+                                        <span class="bold" *ngIf="companyType.numberOfStudentsRevealed == null">neomezený</span>
+                                        <span class="bold" *ngIf="companyType.numberOfStudentsRevealed != null">{{companyType.numberOfStudentsRevealed}}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </muniweb-form-field>
+
+            </ng-container>
+
+            <div footer>
+                <p  style="min-height: 44px;">                
+                    <muniweb-button
+                        class="r"
+                        size="small"
+                        submit="true"
+                        label="Zakoupit"
+                        [(state)]="formConfig.submitButtonState"
+                    ></muniweb-button>
+                </p>
+            </div>
+        </muniweb-form>
+    </ng-container>
+    <ng-container *ngIf="successBuy">
+        <muniweb-notice
+            noticeType="success"
+        >
+            <p>
+                Budete přesměrováni do Obchodního centra
+            </p>
+        </muniweb-notice>
+    </ng-container>
+</muniweb-fieldset>

@@ -1,0 +1,6 @@
+﻿@inherits GridEditorViewPage<IPublishedContent, JobChINSiteHelper, MuniWebGridConfig>
+@using Mlok.Web.Sites.Shared.MuniWeb;
+@using Mlok.Web.Sites.JobChIN;
+@{
+    Html.RenderAngularComponent(Site.JobChINModule, "StudentWorkPositionsOffersComponent", Site.JobChINModule.GetOffersConfig());
+}

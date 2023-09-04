@@ -1,0 +1,113 @@
+<h3>Požadavky na uchazeče</h3>
+
+<muniweb-form #form
+                [config]="formConfig"
+                [formGroup]="form.form"
+                [submitAttempt]="form.formSubmitAttempt"
+>
+    <ng-container body>
+        <muniweb-form-field
+            id="areaOfInterests"
+            label="Oblast zájmu"
+            controlName="areaOfInterests"
+        >
+            <span class="inp-fix inp-fix--select">
+                <ng-select
+                    formControlName="areaOfInterests"
+                    [multiple]="true"
+                    [closeOnSelect]="false"
+                    [items]="config.areaOfInterests"
+                    bindLabel="name"
+                    bindValue="areaOfInterestId"
+                ></ng-select>
+            </span>
+        </muniweb-form-field>
+
+        <muniweb-form-field
+            id="faculties"
+            label="Fakulta"
+            controlName="faculties"
+        >
+            <span class="inp-fix inp-fix--select">
+                <ng-select
+                    formControlName="faculties"
+                    placeholder="Bez preferencí"
+                    [multiple]="true"
+                    [closeOnSelect]="false"
+                    [items]="config.faculties"
+                    bindLabel="displayValue"
+                    bindValue="value"
+                ></ng-select>
+            </span>
+        </muniweb-form-field>
+
+        <muniweb-form-field
+            id="hardSkills"
+            label="Znalosti a dovednosti"
+            controlName="hardSkills"
+        >
+            <jobchin-hardSkillPicker 
+                formControlName="hardSkills"
+            ></jobchin-hardSkillPicker>
+        </muniweb-form-field>
+
+        <muniweb-form-field
+            id="softSkills"
+            label="Měkké dovednosti"
+            controlName="softSkills"
+        >
+            <span class="inp-fix inp-fix--select">
+                <ng-select
+                    formControlName="softSkills"
+                    [multiple]="true"
+                    [closeOnSelect]="false"
+                    [items]="config.softSkills"
+                    bindLabel="name"
+                    bindValue="softSkillId"
+                ></ng-select>
+            </span>
+        </muniweb-form-field>
+
+        <muniweb-form-field
+            id="languages"
+            label="Jazyk"
+            controlName="languages"
+        >
+            <jobchin-languagePicker
+                [useOptional]="true"
+                formControlName="languages"
+            ></jobchin-languagePicker>
+        </muniweb-form-field>
+
+        <muniweb-form-field
+            label="Řidičský průkaz"
+        >
+            <p [ngClass]="{'u-mb-0': showActiveDriver}">
+                <label class="inp-item inp-item--checkbox">
+                    <input
+                        type="checkbox"
+                        formControlName="drivingLicense"
+                    >
+                    <span>
+                        Požadujeme řidičský průkaz skupiny B (osobní auto)
+                    </span>
+                </label>
+            </p>
+            <p *ngIf="showActiveDriver">
+                <label class="inp-item inp-item--checkbox">
+                    <input
+                        type="checkbox"
+                        formControlName="activeDriver"
+                    >
+                    <span>
+                        Požadujeme aktivního řidiče
+                    </span>
+                </label>
+            </p>
+        </muniweb-form-field>
+    </ng-container>
+
+    <jobchin-formFooter footer
+        [formConfig]="formConfig">
+    </jobchin-formFooter>
+</muniweb-form>

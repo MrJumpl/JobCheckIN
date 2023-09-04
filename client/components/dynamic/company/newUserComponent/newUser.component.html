@@ -1,0 +1,37 @@
+<div class="grid grid--center">
+    <div class="grid__cell size--l--6-12 size--m--8-12">
+        <h3>Nový uživatel – {{companyName}}</h3>
+        <div [ngSwitch]="step">
+            <div *ngSwitchCase="RegistrationSteps.SignUp">
+                <muniweb-fieldset>
+                    <h3>Nové přihlašovací údaje</h3>
+                    <member-sign-up
+                        [signUpModel]="signUpModel"
+                        [providerIds]="[]"
+                        (signUp)="nextSignedUp($event)"
+                    ></member-sign-up>
+                </muniweb-fieldset>
+            </div>
+                
+            <div *ngSwitchCase="RegistrationSteps.ContactPerson">
+                <jobchin-company-contactPerson
+                    submitButtonLabel="Vytvořit účet"
+                    [standAlone]="false"
+                    [model]="contactPersonModel"
+                    [onCallBack]="backContactPerson"
+                    [onCallServer]="takeOverAccount"
+                    (onSubmit)="nextSuccess($event)"
+                ></jobchin-company-contactPerson>
+            </div>
+
+            <div *ngSwitchCase="RegistrationSteps.Success">
+                <muniweb-notice noticeType="success">
+                    <span class="bold font-muni big">Vytvoření nového účtu proběhlo úspěšně</span>
+                    <br />
+                    <span *ngIf="postResult">Za chvilku proběhne přihlášení.</span>
+                    <span *ngIf="!postResult">Přihlášení k účtu bude možné po potvrzení e-mailové adresy.</span>
+                </muniweb-notice>
+            </div>
+        </div>
+    </div>
+</div>

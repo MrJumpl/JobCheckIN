@@ -1,0 +1,15 @@
+:host ::ng-deep .btn.is-disabled>span {
+    background-color: transparent;
+    padding: 0;
+}
+
+:host ::ng-deep .state-indicator--loading {
+    border: 3px solid #0000cd;
+    border-left-color: transparent;
+    border-top-color: transparent;
+}
+
+.icon {
+    width: 3em;
+    cursor: pointer;
+}

@@ -1,0 +1,6 @@
+<ng-container *ngIf="isStudent(); else companyTemplate">
+    <jobchin-student-settings></jobchin-student-settings>
+</ng-container>
+<ng-template #companyTemplate>
+    <jobchin-company-settings></jobchin-company-settings>
+</ng-template>

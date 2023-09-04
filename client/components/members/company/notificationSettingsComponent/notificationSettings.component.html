@@ -1,0 +1,26 @@
+<muniweb-fieldset>
+    <h3>Nastavení notifikací</h3>
+    
+    <muniweb-form #form
+                  [config]="formConfig"
+                  [formGroup]="form.form"
+                  [submitAttempt]="form.formSubmitAttempt"
+    >
+        <ng-container body>
+            <muniweb-form-field id="notificationEmail"
+                                label="E-mail pro notifikace"
+                                description="Uveďte v případě, pokud se liší od přihlašovacího e-mailu"
+                                controlName="notificationEmail">
+                <input formControlName="notificationEmail"
+                       class="inp-text"
+                       [maxLength]="jobchinSettings.notificationEmailMaxLength">
+            </muniweb-form-field>
+            
+            <jobchin-notificationFrequency-picker controlName="frequency"></jobchin-notificationFrequency-picker>
+        </ng-container>
+    
+        <jobchin-formFooter footer
+            [formConfig]="formConfig">
+        </jobchin-formFooter>
+    </muniweb-form>
+</muniweb-fieldset>

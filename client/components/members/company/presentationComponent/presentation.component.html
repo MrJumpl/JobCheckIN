@@ -1,0 +1,115 @@
+<muniweb-fieldset>
+    <h3>Představení společnosti</h3>
+    
+    <muniweb-form #form
+                  [config]="formConfig"
+                  [formGroup]="form.form"
+                  [submitAttempt]="form.formSubmitAttempt"
+    >
+        <ng-container body>
+            <muniweb-form-field
+                label="Logo"
+                description="Maximální velikost je 10 MB"
+                controlName="logo"
+            >
+                <div class="size--l--10-12">
+                    <muniweb-temp-file-upload
+                        formControlName="logo"
+                        [accept]="jobchinSettings.allowedImageTypes"
+                        [maxFiles]="1"
+                        [maxFileSizeB]="10485760"
+                    ></muniweb-temp-file-upload>
+                </div>
+            </muniweb-form-field>
+
+            <muniweb-form-field
+                label="Obrázek na pozadí"
+                description="Maximální velikost je 10 MB"
+                controlName="backgroundImage"
+            >
+                <div class="size--l--10-12">
+                    <muniweb-temp-file-upload
+                        formControlName="backgroundImage"
+                        [accept]="jobchinSettings.allowedImageTypes"
+                        [maxFiles]="1"
+                        [maxFileSizeB]="10485760"
+                    ></muniweb-temp-file-upload>
+                </div>
+            </muniweb-form-field>
+            
+            <muniweb-form-field
+                label="Jak byste krátce představili Vaši společnost?"
+                description="Tento popis bude zobrazen u každé pozice, kterou do systému vložíte."
+                controlName="description"
+            >
+                <textarea 
+                    class="inp-text"
+                    rows="3"
+                    formControlName="shortDescription"
+                    [maxLength]="jobchinSettings.descMaxLength"
+                ></textarea>
+            </muniweb-form-field>
+
+            <muniweb-form-field
+                label="Jak byste poutavě představili Vaši společnost?"
+                controlName="description"
+            >
+                <muniweb-rte 
+                    formControlName="description"
+                    [maxLength]="jobchinSettings.rteLettersMaxLength"
+                    [tinyConfig]="tinyConfig"
+                ></muniweb-rte>
+            </muniweb-form-field>
+        
+            <muniweb-form-field
+                label="Popište svoji firemní kulturu. Čím je specifická?"
+                controlName="differences"
+            >
+                <muniweb-rte 
+                    formControlName="differences"
+                    [maxLength]="jobchinSettings.rteLettersMaxLength"
+                    [tinyConfig]="tinyConfig"
+                ></muniweb-rte>
+            </muniweb-form-field>
+        
+            <muniweb-form-field
+                label="Popiště, jak vypadá váš příjímací proces."
+                controlName="interviewDescription"
+            >
+                <muniweb-rte 
+                    formControlName="interviewDescription"
+                    [maxLength]="jobchinSettings.rteLettersMaxLength"
+                    [tinyConfig]="tinyConfig"
+                ></muniweb-rte>
+            </muniweb-form-field>
+            
+                    
+            <muniweb-form-field id="web"
+                                label="Webové stránky"
+                                controlName="web">
+                <input formControlName="web"
+                        class="inp-text"
+                        [maxLength]="jobchinSettings.socialMediaMaxLength">
+            </muniweb-form-field>
+            
+            <muniweb-form-field id="linkedin"
+                                label="Firemní LinkedIn"
+                                controlName="linkedin">
+        
+                <input type="text" class="inp-text socialMedia-linkedin" formControlName="linkedin" [maxLength]="jobchinSettings.socialMediaMaxLength">
+                <span class="socialMediaPlaceholder">www.linkedin.com/in/</span>
+            </muniweb-form-field>
+            
+            <muniweb-form-field id="facebook"
+                                label="Firemní Facebook"
+                                controlName="facebook">
+                <input type="text" class="inp-text socialMedia-facebook" formControlName="facebook" [maxLength]="jobchinSettings.socialMediaMaxLength">
+                <span class="socialMediaPlaceholder">www.facebook.com/</span>
+            </muniweb-form-field>
+        </ng-container>
+    
+        <jobchin-formFooter footer
+            [formConfig]="formConfig">
+        </jobchin-formFooter>
+    </muniweb-form>
+</muniweb-fieldset>

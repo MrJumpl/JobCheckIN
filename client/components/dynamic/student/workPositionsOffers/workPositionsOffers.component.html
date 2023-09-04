@@ -1,0 +1,149 @@
+<form
+    class="filter-form"
+    [formGroup]="filterForm"
+    (submit)="setFilter()"
+>
+    <h3>Vyhledejte pracovní pozice</h3>
+    <div class="grid grid--middle">
+        <div class="grid__cell size--l--3-12">
+            <muniweb-form-field id="areaOfInterests"
+                                label="Oblast zájmu"
+                                controlName="areaOfInterests">
+                <span class="inp-fix inp-fix--select">
+                    <ng-select formControlName="areaOfInterests"
+                        [multiple]="true"
+                        [closeOnSelect]="false"
+                        [items]="getAreaOfInterests()"
+                        placeholder="Všechny oblasti"
+                        bindLabel="name"
+                        bindValue="areaOfInterestId"
+                    ></ng-select>
+                </span>
+            </muniweb-form-field>
+        </div>
+        <div class="grid__cell size--l--3-12">
+            <muniweb-form-field id="locations"
+                                label="Město / Okres"
+                                controlName="locations">
+                <span class="inp-fix inp-fix--select">
+                    <ng-select formControlName="locations"
+                        [multiple]="true"
+                        [closeOnSelect]="false"
+                        [items]="getLocalAdministrativeUnits()"
+                        placeholder="Celá ČR"
+                        bindLabel="displayValue"
+                        bindValue="value"
+                    ></ng-select>
+                </span>
+            </muniweb-form-field>
+        </div>
+        <div class="grid__cell size--l--3-12">
+            <muniweb-form-field id="contractTypes"
+                                label="Typ úvazku"
+                                controlName="contractTypes">
+                <span class="inp-fix inp-fix--select">
+                    <ng-select formControlName="contractTypes"
+                        [multiple]="true"
+                        [closeOnSelect]="false"
+                        [items]="getContractTypes()"
+                        placeholder="Všechny"
+                        bindLabel="name"
+                        bindValue="contractTypeId"
+                    ></ng-select>
+                </span>
+            </muniweb-form-field>
+        </div>
+        <div class="grid__cell size--l--3-12 button-alignment-right">
+            <p>
+                <a href="javascript:void(0)" (click)="onDetailedFilterClick()"><span class="icon icon-sliders-h"></span> Zadat více parametrů <span class="icon icon-angle-{{detailedFilter ? 'up' : 'down'}}"></span></a>
+            </p>
+        </div>
+    </div>
+
+    <div class="grid detailedFilter-content" [ngClass]="{ 'detailedFilter-content-open': detailedFilter }" #detailedFilterRef>
+        <div class="grid__cell size--l--4-12">
+            <muniweb-form-field id="name"
+                                label="Klíčové slovo v nabídce"
+                                controlName="name">
+                <input placeholder="Vyhledat název pracovní pozice či jiné klíčové slovo" type="text" class="inp-text" formControlName="name">
+            </muniweb-form-field>
+        </div>
+        <div class="grid__cell size--l--4-12">
+            <muniweb-form-field id="name"
+                                label="Home office"
+                                controlName="location">
+                <span class="inp-fix inp-fix--select">
+                    <ng-select formControlName="remotes"
+                        [multiple]="true"
+                        [closeOnSelect]="false"
+                        [items]="jobchinSettings.remoteTypes"
+                        placeholder="Nezáleží"
+                        bindLabel="displayValue"
+                        bindValue="value"
+                    ></ng-select>
+                </span>
+            </muniweb-form-field>
+        </div>
+        <div class="grid__cell size--l--4-12">
+            <muniweb-form-field id="name"
+                                label="Vyžadovaný jazyk"
+                                controlName="name">
+                <span class="inp-fix inp-fix--select">
+                    <ng-select
+                        bindLabel="name"
+                        bindValue="languageId"
+                        placeholder="Nezáleží"
+                        [multiple]="true"
+                        [closeOnSelect]="false"
+                        [items]="getLanguages()"
+                        formControlName="languages"
+                    ></ng-select>
+                </span>
+            </muniweb-form-field>
+        </div>
+    </div>
+
+    <p class="button-alignment-left">
+        <muniweb-button
+            size="small"
+            submit="true"
+            label="Zobrazit nabídky"
+        ></muniweb-button>
+    </p>
+</form>
+
+<div class="grid grid--nogutter">
+    <div class="grid__cell grid__cell-mobile-hide size--l--6-12 size--m--6-12 size--s--1-2">
+        <h3>Nabídky práce</h3>
+    </div>
+    <div class="grid__cell size--l--6-12 size--m--6-12 size--s--1-2 button-alignment-right">
+        <div class="btn-dropdown" data-href="dropdown2" #orderByButton>
+            <a href="#" class="btn btn-primary btn-s btn-icon-after" data-href="dropdown2">
+                <span>
+                    Seřadit podle
+                    <span class="icon icon-angle-down"></span>
+                </span>
+            </a>
+            <div class="btn-dropdown__menu btn-dropdown__menu--down">
+                <ul class="btn-dropdown__list">
+                    <li class="btn-dropdown__item" *ngFor="let item of jobchinSettings.orderByOptions">
+                        <a href="javascript:void(0)" class="btn-dropdown__link with-icon" (click)="onOrderByChange(item.value)">
+                            <span class="icon icon-check" *ngIf="filter.orderBy === item.value"></span>
+                            {{ item.displayValue }}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="grid__cell grid__cell-mobile-only">
+        <h3>Nabídky práce</h3>
+    </div>
+</div>
+
+
+<muniweb-pagination [loading]="loading" [pagesCount]="workPositions?.paginationInfo?.pagesCount" (changePage)="loadPage($event)">
+    <jobchin-student-workPositionsListView
+        [workPositions]="workPositions?.workPositions"
+    ></jobchin-student-workPositionsListView>
+</muniweb-pagination>

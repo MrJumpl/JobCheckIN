@@ -1,0 +1,42 @@
+<h3>Doplňující otázky na uchazeče</h3>
+
+<muniweb-form #form
+                [config]="formConfig"
+                [formGroup]="form.form"
+                [submitAttempt]="form.formSubmitAttempt"
+>
+    <ng-container body>
+
+        <p>
+            <label class="inp-item inp-item--checkbox">
+                <input type="checkbox"
+                       formControlName="hasAdditionalQuestions">
+                <span>
+                    Chci uvést doplňující otázku
+                </span>
+            </label>
+            
+            <muniweb-form-field *ngIf="showAdditionalQuestions"
+                                id="additionalQuestions"
+                                controlName="additionalQuestions">
+                <textarea formControlName="additionalQuestions"
+                        class="inp-text"
+                        [maxLength]="jobchinSettings.shortRteMaxLength"></textarea>
+            </muniweb-form-field>
+        </p>
+
+        <p>
+            <label class="inp-item inp-item--checkbox">
+                <input type="checkbox"
+                       formControlName="coverLetter">
+                <span>
+                    Chci, aby student zaslal motivační dopis
+                </span>
+            </label>
+        </p>
+    </ng-container>
+
+    <jobchin-formFooter footer
+        [formConfig]="formConfig">
+    </jobchin-formFooter>
+</muniweb-form>

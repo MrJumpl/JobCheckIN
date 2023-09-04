@@ -1,0 +1,35 @@
+<div class="grid grid--middle u-mb-30">
+    <div class="grid__cell size--l--6-12">
+        <jobchin-student-photo
+            size="150"
+            [studentId]="getStudentId()"
+            [fullName]="getFullName()"
+            [photoLink]="getPhotoLink()"
+            [photoClickable]="true"
+            (onPhotoClick)="openPhotoPopUp()"
+        ></jobchin-student-photo>
+    </div>
+    <div class="grid__cell size--l--6-12">
+        <p class="u-mb-0 right">
+            <muniweb-button
+                size="small"
+                label="Stáhnout CV"
+                [state]="donwloadState"
+                (click)="downloadCv()"
+            ></muniweb-button>
+        </p>
+    
+        <p class="small right" *ngIf="lastTimeUpdatedByStudent()">
+            <span>Poseldní aktualizace: {{ lastTimeUpdatedByStudent() | date: 'mediumDate' }}</span>
+        </p>
+    </div>
+    
+</div>
+
+<muniweb-pop-up
+	title="Foto"
+	[open]="photoPopUp"
+	(onClose)="closePhotoPopUp()"
+>
+    <jobchin-student-changePhoto (onSubmit)="closePhotoPopUp()"></jobchin-student-changePhoto>
+</muniweb-pop-up>

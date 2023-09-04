@@ -1,0 +1,68 @@
+<muniweb-fieldset>
+    <muniweb-form #form
+                  [config]="formConfig"
+                  [formGroup]="form.form"
+                  [submitAttempt]="form.formSubmitAttempt"
+    >
+        <ng-container body>
+            <muniweb-form-field
+                id="areaOfInterests"
+                label="Nabízíme uplatnění v těchto oblastech"
+                controlName="areaOfInterests"
+            >
+                <span class="inp-fix inp-fix--select">
+                    <ng-select
+                        formControlName="areaOfInterests"
+                        [multiple]="true"
+                        [closeOnSelect]="false"
+                        [items]="config.areaOfInterests"
+                        bindLabel="name"
+                        bindValue="areaOfInterestId"
+                    ></ng-select>
+                </span>
+            </muniweb-form-field>
+        
+            <muniweb-form-field
+                id="faculties"
+                label="Stojíme o uchazeče z těchto fakult"
+                controlName="faculties"
+            >
+                <span class="inp-fix inp-fix--select">
+                    <ng-select
+                        formControlName="faculties"
+                        [multiple]="true"
+                        [closeOnSelect]="false"
+                        [items]="config.faculties"
+                        bindLabel="displayValue"
+                        bindValue="value"
+                    ></ng-select>
+                </span>
+            </muniweb-form-field>
+        
+            <muniweb-form-field
+                id="languageSkillPrefered"
+                label="Hledáte uchazeče, kteří ovládají některé z těchto cizích jazyků"
+                controlName="languageSkillPrefered"
+            >
+                <jobchin-languagePicker
+                    formControlName="languageSkillPrefered"
+                ></jobchin-languagePicker>
+            </muniweb-form-field>
+        
+            <muniweb-form-field
+                label="Co požadujete, aby uměli vaši ucahzeči? Jací by měli být?"
+                controlName="peopleTypesSought"
+            >
+                <muniweb-rte 
+                    formControlName="peopleTypesSought"
+                    [maxLength]="jobchinSettings.rteLettersMaxLength"
+                    [tinyConfig]="tinyConfig"
+                ></muniweb-rte>
+            </muniweb-form-field>
+        </ng-container>
+    
+        <jobchin-formFooter footer
+            [formConfig]="formConfig">
+        </jobchin-formFooter>
+    </muniweb-form>
+</muniweb-fieldset>

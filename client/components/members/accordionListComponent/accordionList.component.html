@@ -1,0 +1,30 @@
+<muniweb-accordion *ngIf="showAccordion()"
+    design="bordered"
+    [openMultiple]="true"
+>
+    <ng-container *ngFor="let item of formArray.controls; index as i">
+        <muniweb-accordion-item
+            [title]="getTitle(item)"
+            [createOpen]="createOpen(item, i)"
+            [class]="getItemClass(item)"
+        >
+            <ng-container *ngTemplateOutlet="itemForm; context: getContext(i, item)"></ng-container>
+            <p class="right">
+                <muniweb-button
+                    [label]="removeButtonLabel"
+                    [size]="MuniWebButtonSize.small"
+                    (click)="onRemove(i)"
+                ></muniweb-button>
+            </p>
+        </muniweb-accordion-item>
+    </ng-container>
+</muniweb-accordion>
+
+
+<p *ngIf="showAdd()">
+    <muniweb-button
+        [label]="addButtonLabel"
+        [size]="MuniWebButtonSize.small"
+        (click)="onAdd()"
+    ></muniweb-button>
+</p>

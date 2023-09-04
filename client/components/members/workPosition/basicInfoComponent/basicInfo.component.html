@@ -1,0 +1,219 @@
+<h3>Základní informace</h3>
+
+<muniweb-loading
+    [loading]="intervalsLoading"
+>
+    <muniweb-form #form
+                    [config]="formConfig"
+                    [formGroup]="form.form"
+                    [submitAttempt]="form.formSubmitAttempt"
+    >
+        <ng-container body>
+            <div class="grid">
+                <div class="grid__cell size--l--6-12">
+                    <muniweb-form-field id="name"
+                                        label="Název pracovní pozice"
+                                        controlName="name">
+                        <input formControlName="name"
+                                class="inp-text"
+                                [maxLength]="jobchinSettings.workPositionNameMaxLength">
+                    </muniweb-form-field>                
+                </div>
+                <div class="grid__cell size--l--6-12">
+                    <muniweb-form-field
+                        id="language"
+                        label="Jazyk inzerátu"
+                        controlName="language"
+                    >
+                        <span class="inp-fix inp-fix--select">
+                            <ng-select formControlName="language"
+                                [multiple]="false"
+                                [closeOnSelect]="true"
+                                [items]="languages"
+                                bindLabel="displayValue"
+                                bindValue="value"
+                            ></ng-select>
+                        </span>
+                    </muniweb-form-field>
+                </div>
+            </div>
+
+            <div class="grid">
+                <div class="grid__cell size--l--6-12">
+                    <muniweb-form-field
+                        id="publication"
+                        label="Zveřejnit inzerát od"
+                        controlName="publication"
+                    >
+                        <muniweb-datetime
+                            formControlName="publication"
+                            noBottomMargin="true"
+                            [disabled]="published"
+                            [minDate]="getPublicationMinDate()"
+                            [maxDate]="getPublicationMaxDate()"
+                            [filterDate]="filterDate"
+                        ></muniweb-datetime>
+                        <span *ngIf="published" class="small">*Nelze upravit poté, co je pracovní pozice zveřejněná</span>
+                    </muniweb-form-field>
+                </div>
+                <div class="grid__cell size--l--6-12">
+                    <muniweb-form-field
+                        id="expiration"
+                        label="Zveřejnit inzerát do"
+                        controlName="expiration"
+                    >
+                        <muniweb-datetime
+                            formControlName="expiration"
+                            [filterDate]="filterExprirationDate"
+                            [minDate]="getExpirationMinDate()"
+                            [maxDate]="getExpirationMaxDate()"
+                            noBottomMargin="true"
+                        ></muniweb-datetime>
+                    </muniweb-form-field>
+                </div>
+            </div>
+
+            <muniweb-form-field
+                label="Nástup do práce"
+                noBottomMargin="true"
+            >
+                <div class="grid grid--middle">
+                    <div class="grid__cell size--l--6-12" *ngIf="showJobBeginning">
+                        <muniweb-form-field controlName="jobBeginning">
+                            <muniweb-datetime
+                                formControlName="jobBeginning"
+                                [minDate]="getPublicationMinDate()"
+                                noBottomMargin="true"
+                            ></muniweb-datetime>
+                        </muniweb-form-field>
+                    </div>
+                    <div class="grid__cell size--l--6-12">
+                        <p>
+                            <label class="inp-item inp-item--checkbox">
+                                <input
+                                    type="checkbox"
+                                    formControlName="workFromNow"
+                                >
+                                <span>
+                                    Ihned
+                                </span>
+                            </label>
+                        </p>
+                    </div>
+                </div>
+            </muniweb-form-field>
+
+
+            <jobchin-contractType-picker controlName="contractTypes"></jobchin-contractType-picker>
+
+            <muniweb-form-field
+                label="Práce z domova"
+                id="remote"
+                type="radio"
+                controlName="remote"
+            >
+                <div class="inp-items">
+                    <ul class="inp-items__list">
+                        <li class="inp-items__item" *ngFor="let item of jobchinSettings.remoteTypes">
+                            <label class="inp-item inp-item--radio">
+                                <input type="radio" formControlName="remote" [value]="item.value">
+                                <span>{{ item.displayValue }}</span>
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+            </muniweb-form-field>
+
+            <muniweb-form-field
+                controlName="location"
+                label="Místo výkonu práce"
+                description="Pokud není práce plně z domova, musí být vyplěna právě jedna adresa."
+                >
+                <div class="grid" [formGroup]="location">
+                    <div class="grid__cell size--l--6-12 size--m--2-4">
+                        <muniweb-form-field
+                            id="branch"
+                            label="Pobočka"
+                            controlName="branchId"
+                            noBottomMargin="true"
+                        >
+                            <span class="inp-fix inp-fix--select">
+                                <ng-select formControlName="branchId"
+                                    [multiple]="false"
+                                    [closeOnSelect]="true"
+                                    [items]="branches"
+                                    bindLabel="displayValue"
+                                    bindValue="value"
+                                ></ng-select>
+                            </span>
+                            <span *ngIf="!hasBranches()" class="small">*Nemáte vyplněnou žádnou pobočku</span>
+                        </muniweb-form-field>
+                    </div>
+                    <div class="grid__cell size--l--6-12 size--m--2-4">
+                        <muniweb-form-field 
+                            id="disctrict"
+                            label="Místo pracovní pozice"
+                            controlName="locationId"
+                            noBottomMargin="true"
+                        >
+                            <span class="inp-fix inp-fix--select">
+                                <ng-select formControlName="locationId"
+                                    [multiple]="false"
+                                    [closeOnSelect]="true"
+                                    [items]="getLocalAdministrativeUnits()"
+                                    bindLabel="displayValue"
+                                    bindValue="value"
+                                ></ng-select>
+                            </span>
+                        </muniweb-form-field>
+                    </div>
+                </div>
+                <error-message
+                    errorMsg="Musí být vyplněna právě jedna ze dvou adres."
+                ></error-message>
+            </muniweb-form-field>
+            
+            <div class="grid">
+                <div class="grid__cell size--l--6-12">
+                    <muniweb-form-field
+                        id="users"
+                        label="Zodpovědné osoby"
+                        controlName="users"
+                    >
+                        <span class="inp-fix inp-fix--select">
+                            <ng-select formControlName="users"
+                                [multiple]="true"
+                                [closeOnSelect]="true"
+                                [items]="users"
+                                bindLabel="fullName"
+                                bindValue="memberId"
+                            ></ng-select>
+                        </span>
+                    </muniweb-form-field>
+                </div>
+                <div class="grid__cell size--l--6-12">
+                    <muniweb-form-field id="public"
+                                        label="Zveřejnit i nepřihlášeným uživatelům"
+                                        controlName="public">
+                        <p>
+                            <label class="inp-item inp-item--checkbox">
+                                <input
+                                    type="checkbox"
+                                    formControlName="public"
+                                >
+                                <span>
+                                    Ano
+                                </span>
+                            </label>
+                        </p>
+                    </muniweb-form-field>                
+                </div>
+            </div>
+        </ng-container>
+
+        <jobchin-formFooter footer
+            [formConfig]="formConfig">
+        </jobchin-formFooter>
+    </muniweb-form>
+</muniweb-loading>
+

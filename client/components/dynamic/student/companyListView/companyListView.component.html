@@ -1,0 +1,28 @@
+<div *ngFor="let key of getGroups(); index as i">
+    <hr *ngIf="i > 0">
+
+    <h3>{{ key }}</h3>
+
+    <div class="grid">
+        <div class="grid__cell size--l--2.4-12" *ngFor="let company of groups[key]">
+            <article class="box-bg box-bg--small box-article-grid u-mb-0">
+                <a href="#" class="box-article-grid__inner">
+                    <p class="box-article-grid__img">
+                        <img class="logo" src="{{ getLogo(company.companyLogo) }}">
+                    </p>
+                    <div class="box-article-grid__content">
+                        <h2 class="box-article-grid__title">{{ company.companyName }}</h2>
+                    </div>
+                </a>
+            </article>
+            <div class="box-bg box-bg--small box-bg--color-light box-bg--primary" *ngIf="company.workPositionCount > 0">
+                <p>
+                    {{ company.workPositionCount }}
+                    <span i18n="@@JobChINWorkPositionCount">{company.workPositionCount, plural, =1 {nabídka} other {nabídky}}</span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p *ngIf="empty">Vámi zadaným kritériím nevyhovuje žádný zaměstnavatel</p>

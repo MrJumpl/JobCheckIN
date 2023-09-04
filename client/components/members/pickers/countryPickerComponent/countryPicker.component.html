@@ -1,0 +1,16 @@
+    
+<muniweb-form-field id="countryId"
+                label="Stát"
+                required="true"
+                [controlName]="controlName"
+>
+    <span class="inp-fix inp-fix--select">
+        <ng-select [formControl]="getFormControl()"
+                [multiple]="false"
+                [closeOnSelect]="true"
+                [items]="getCountries()"
+                bindLabel="displayValue"
+                bindValue="value"
+        ></ng-select>
+    </span>
+</muniweb-form-field>     
